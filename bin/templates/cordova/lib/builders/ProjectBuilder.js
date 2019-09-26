@@ -17,7 +17,6 @@
        under the License.
 */
 
-var Q = require('q');
 var fs = require('fs');
 var path = require('path');
 var shell = require('shelljs');
@@ -273,10 +272,10 @@ class ProjectBuilder {
                     return check_reqs.check_android_target(error).then(function () {
                         // If due to some odd reason - check_android_target succeeds
                         // we should still fail here.
-                        return Q.reject(error);
+                        return Promise.reject(error);
                     });
                 }
-                return Q.reject(error);
+                return Promise.reject(error);
             });
     }
 
@@ -284,7 +283,7 @@ class ProjectBuilder {
         var builder = this;
         var wrapper = path.join(this.root, 'gradlew');
         var args = builder.getArgs('clean', opts);
-        return Q().then(function () {
+        return Promise.resolve().then(function () {
             return spawn(wrapper, args, { stdio: 'inherit' });
         })
             .then(function () {

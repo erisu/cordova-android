@@ -17,7 +17,6 @@
     under the License.
 */
 
-var Q = require('q');
 var os = require('os');
 var events = require('cordova-common').events;
 var spawn = require('cordova-common').superspawn.spawn;
@@ -70,7 +69,7 @@ Adb.install = function (target, packagePath, opts) {
                     '\nEither uninstall an app or increment the versionCode.';
             }
 
-            return Q.reject(new CordovaError('Failed to install apk to device: ' + output));
+            return Promise.reject(new CordovaError('Failed to install apk to device: ' + output));
         }
     });
 };
@@ -85,7 +84,7 @@ Adb.shell = function (target, shellCommand) {
     var args = ['-s', target, 'shell'];
     shellCommand = shellCommand.split(/\s+/);
     return spawn('adb', args.concat(shellCommand), { cwd: os.tmpdir() }).catch(function (output) {
-        return Q.reject(new CordovaError('Failed to execute shell command "' +
+        return Promise.reject(new CordovaError('Failed to execute shell command "' +
             shellCommand + '"" on device: ' + output));
     });
 };
@@ -93,7 +92,7 @@ Adb.shell = function (target, shellCommand) {
 Adb.start = function (target, activityName) {
     events.emit('verbose', 'Starting application "' + activityName + '" on target ' + target + '...');
     return Adb.shell(target, 'am start -W -a android.intent.action.MAIN -n' + activityName).catch(function (output) {
-        return Q.reject(new CordovaError('Failed to start application "' +
+        return Promise.reject(new CordovaError('Failed to start application "' +
             activityName + '"" on device: ' + output));
     });
 };
