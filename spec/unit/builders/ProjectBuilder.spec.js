@@ -202,7 +202,7 @@ describe('ProjectBuilder', () => {
             const errorMessage = 'ERROR: failed to find target with hash string';
 
             ProjectBuilder.__set__('check_reqs', checkReqsSpy);
-            checkReqsSpy.check_android_target.and.returnValue(Q.resolve());
+            checkReqsSpy.check_android_target.and.resolveTo();
             spawnSpy.and.returnValue(Q.reject(errorMessage));
 
             return builder.build({}).then(
