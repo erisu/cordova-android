@@ -21,6 +21,7 @@
 
 var shelljs = require('shelljs');
 var child_process = require('child_process');
+var Q = require('q');
 var path = require('path');
 var fs = require('fs');
 var os = require('os');
@@ -192,9 +193,7 @@ module.exports.check_java = function () {
             }
         }
     }).then(function () {
-        return new Promise(resolve => {
-            resolve(child_process.execSync('javac -version'));
-        })
+        return Q.denodeify(child_process.exec)('javac -version')
             .then(outputs => {
                 // outputs contains two entries: stdout and stderr
                 // Java <= 8 writes version info to stderr, Java >= 9 to stdout
