@@ -249,6 +249,10 @@ class Api {
     build (buildOptions) {
         var self = this;
 
+        // Parse user's defined config.xml
+        const config = new ConfigParser(path.resolve(this.root, '../../config.xml'));
+        buildOptions.userConfigParser = config;
+
         return require('./lib/check_reqs').run().then(function () {
             return require('./lib/build').run.call(self, buildOptions);
         }).then(function (buildResults) {
@@ -278,6 +282,11 @@ class Api {
      */
     run (runOptions) {
         var self = this;
+
+        // Parse user's defined config.xml
+        const config = new ConfigParser(path.resolve(this.root, '../../config.xml'));
+        runOptions.userConfigParser = config;
+
         return require('./lib/check_reqs').run().then(function () {
             return require('./lib/run').run.call(self, runOptions);
         });
@@ -292,6 +301,11 @@ class Api {
      */
     clean (cleanOptions) {
         var self = this;
+
+        // Parse user's defined config.xml
+        const config = new ConfigParser(path.resolve(this.root, '../../config.xml'));
+        cleanOptions.userConfigParser = config;
+
         // This will lint, checking for null won't
         if (typeof cleanOptions === 'undefined') {
             cleanOptions = {};

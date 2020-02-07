@@ -144,6 +144,11 @@ module.exports.runClean = function (options) {
     var opts = parseOpts(options, null, this.root);
     var builder = this._builder;
 
+    const preferenceGradleVersion = options.userConfigParser.doc.find('./platform[@name="android"]/preference[@name="GradleVersion"]');
+    if (preferenceGradleVersion) {
+        opts.gradleVersion = preferenceGradleVersion.attrib.value;
+    }
+
     return builder.prepEnv(opts).then(function () {
         return builder.clean(opts);
     });
@@ -164,6 +169,11 @@ module.exports.runClean = function (options) {
 module.exports.run = function (options, optResolvedTarget) {
     var opts = parseOpts(options, optResolvedTarget, this.root);
     var builder = this._builder;
+
+    const preferenceGradleVersion = options.userConfigParser.doc.find('./platform[@name="android"]/preference[@name="GradleVersion"]');
+    if (preferenceGradleVersion) {
+        opts.gradleVersion = preferenceGradleVersion.attrib.value;
+    }
 
     return builder.prepEnv(opts).then(function () {
         if (opts.prepEnv) {
