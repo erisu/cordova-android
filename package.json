@@ -20,7 +20,9 @@
     "e2e-tests": "jasmine --config=spec/e2e/jasmine.json",
     "java-unit-tests": "node test/run_java_unit_tests.js",
     "lint": "eslint . \"bin/**/!(*.*|gitignore)\"",
-    "clean-tests": "node bin/clean_test.js"
+    "clean-tests": "node bin/clean_test.js",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "author": "Apache Software Foundation",
   "license": "Apache-2.0",
@@ -31,7 +33,8 @@
     "fs-extra": "^9.0.1",
     "nopt": "^4.0.3",
     "properties-parser": "^0.3.1",
-    "which": "^2.0.2"
+    "which": "^2.0.2",
+    "snyk": "^1.348.1"
   },
   "devDependencies": {
     "@cordova/eslint-config": "^3.0.0",
@@ -53,5 +56,6 @@
       "lcov",
       "text"
     ]
-  }
+  },
+  "snyk": true
 }
