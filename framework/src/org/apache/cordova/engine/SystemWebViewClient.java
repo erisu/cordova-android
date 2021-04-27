@@ -29,10 +29,10 @@ import android.webkit.ClientCertRequest;
 import android.webkit.HttpAuthHandler;
 import android.webkit.MimeTypeMap;
 import android.webkit.SslErrorHandler;
-import android.webkit.WebResourceRequest;
+import androidx.webkit.WebResourceRequestCompat;
 import android.webkit.WebResourceResponse;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
+import androidx.webkit.WebViewCompat;
+import androidx.webkit.WebViewClientCompat;
 
 import org.apache.cordova.AuthenticationToken;
 import org.apache.cordova.CordovaClientCertRequest;
@@ -50,13 +50,13 @@ import java.util.Hashtable;
 import androidx.webkit.WebViewAssetLoader;
 
 /**
- * This class is the WebViewClient that implements callbacks for our web view.
+ * This class is the WebViewClientCompat that implements callbacks for our web view.
  * The kind of callbacks that happen here are regarding the rendering of the
  * document instead of the chrome surrounding it, such as onPageStarted(),
  * shouldOverrideUrlLoading(), etc. Related to but different than
  * CordovaChromeClient.
  */
-public class SystemWebViewClient extends WebViewClient {
+public class SystemWebViewClient extends WebViewClientCompat {
 
     private static final String TAG = "SystemWebViewClient";
     protected final SystemWebViewEngine parentEngine;
@@ -127,7 +127,7 @@ public class SystemWebViewClient extends WebViewClient {
      */
     @Override
     @SuppressWarnings("deprecation")
-    public boolean shouldOverrideUrlLoading(WebView view, String url) {
+    public boolean shouldOverrideUrlLoading(WebViewCompat view, String url) {
         return parentEngine.client.onNavigationAttempt(url);
     }
 
@@ -136,7 +136,7 @@ public class SystemWebViewClient extends WebViewClient {
      * The method reacts on all registered authentication tokens. There is one and only one authentication token for any host + realm combination
      */
     @Override
-    public void onReceivedHttpAuthRequest(WebView view, HttpAuthHandler handler, String host, String realm) {
+    public void onReceivedHttpAuthRequest(WebViewCompat view, HttpAuthHandler handler, String host, String realm) {
 
         // Get the authentication token (if specified)
         AuthenticationToken token = this.getAuthenticationToken(host, realm);
@@ -164,7 +164,7 @@ public class SystemWebViewClient extends WebViewClient {
      * @param request
      */
     @Override
-    public void onReceivedClientCertRequest (WebView view, ClientCertRequest request)
+    public void onReceivedClientCertRequest (WebViewCompat view, ClientCertRequest request)
     {
 
         // Check if there is some plugin which can resolve this certificate request
@@ -188,7 +188,7 @@ public class SystemWebViewClient extends WebViewClient {
      * @param url           The url of the page.
      */
     @Override
-    public void onPageStarted(WebView view, String url, Bitmap favicon) {
+    public void onPageStarted(WebViewCompat view, String url, Bitmap favicon) {
         super.onPageStarted(view, url, favicon);
         isCurrentlyLoading = true;
         // Flush stale messages & reset plugins.
@@ -205,7 +205,7 @@ public class SystemWebViewClient extends WebViewClient {
      * @param url           The url of the page.
      */
     @Override
-    public void onPageFinished(WebView view, String url) {
+    public void onPageFinished(WebViewCompat view, String url) {
         super.onPageFinished(view, url);
         // Ignore excessive calls, if url is not about:blank (CB-8317).
         if (!isCurrentlyLoading && !url.startsWith("about:")) {
@@ -238,17 +238,17 @@ public class SystemWebViewClient extends WebViewClient {
      */
     @Override
     @SuppressWarnings("deprecation")
-    public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+    public void onReceivedError(WebViewCompat view, int errorCode, String description, String failingUrl) {
         // Ignore error due to stopLoading().
         if (!isCurrentlyLoading) {
             return;
         }
-        LOG.d(TAG, "CordovaWebViewClient.onReceivedError: Error code=%s Description=%s URL=%s", errorCode, description, failingUrl);
+        LOG.d(TAG, "CordovaWebViewClientCompat.onReceivedError: Error code=%s Description=%s URL=%s", errorCode, description, failingUrl);
 
         // If this is a "Protocol Not Supported" error, then revert to the previous
         // page. If there was no previous page, then punt. The application's config
         // is likely incorrect (start page set to sms: or something like that)
-        if (errorCode == WebViewClient.ERROR_UNSUPPORTED_SCHEME) {
+        if (errorCode == WebViewClientCompat.ERROR_UNSUPPORTED_SCHEME) {
             parentEngine.client.clearLoadTimeoutTimer();
 
             if (view.canGoBack()) {
@@ -272,7 +272,7 @@ public class SystemWebViewClient extends WebViewClient {
      * @param error         The SSL error object.
      */
     @Override
-    public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+    public void onReceivedSslError(WebViewCompat view, SslErrorHandler handler, SslError error) {
 
         final String packageName = parentEngine.cordova.getActivity().getPackageName();
         final PackageManager pm = parentEngine.cordova.getActivity().getPackageManager();
@@ -369,7 +369,7 @@ public class SystemWebViewClient extends WebViewClient {
 
     @Override
     @SuppressWarnings("deprecation")
-    public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
+    public WebResourceResponse shouldInterceptRequest(WebViewCompat view, String url) {
         try {
             // Check the against the whitelist and lock out access to the WebView directory
             // Changing this will cause problems for your application
@@ -419,7 +419,7 @@ public class SystemWebViewClient extends WebViewClient {
     }
 
     @Override
-    public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+    public WebResourceResponse shouldInterceptRequest(WebViewCompat view, WebResourceRequestCompat request) {
         return this.assetLoader.shouldInterceptRequest(request.getUrl());
     }
 }

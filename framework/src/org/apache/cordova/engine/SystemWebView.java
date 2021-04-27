@@ -23,8 +23,8 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.webkit.WebChromeClient;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
+import androidx.webkit.WebViewCompat;
+import androidx.webkit.WebViewClientCompat;
 
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaWebView;
@@ -33,7 +33,7 @@ import org.apache.cordova.CordovaWebViewEngine;
 /**
  * Custom WebView subclass that enables us to capture events needed for Cordova.
  */
-public class SystemWebView extends WebView implements CordovaWebViewEngine.EngineView {
+public class SystemWebView extends WebViewClientCompat implements CordovaWebViewEngine.EngineView {
     private SystemWebViewClient viewClient;
     SystemWebChromeClient chromeClient;
     private SystemWebViewEngine parentEngine;
@@ -66,7 +66,7 @@ public class SystemWebView extends WebView implements CordovaWebViewEngine.Engin
     }
 
     @Override
-    public void setWebViewClient(WebViewClient client) {
+    public void setWebViewClient(WebViewClientCompat client) {
         viewClient = (SystemWebViewClient)client;
         super.setWebViewClient(client);
     }

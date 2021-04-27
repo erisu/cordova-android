@@ -29,9 +29,9 @@ import android.content.pm.ApplicationInfo;
 import android.os.Build;
 import android.view.View;
 import android.webkit.ValueCallback;
-import android.webkit.WebSettings;
+import androidx.webkit.WebSettingsCompat;
 import android.webkit.WebSettings.LayoutAlgorithm;
-import android.webkit.WebView;
+import androidx.webkit.WebViewCompat;
 
 import org.apache.cordova.CordovaBridge;
 import org.apache.cordova.CordovaInterface;
@@ -147,7 +147,7 @@ public class SystemWebViewEngine implements CordovaWebViewEngine {
         webView.setInitialScale(0);
         webView.setVerticalScrollBarEnabled(false);
         // Enable JavaScript
-        final WebSettings settings = webView.getSettings();
+        final WebSettingsCompat settings = webView.getSettings();
         settings.setJavaScriptEnabled(true);
         settings.setJavaScriptCanOpenWindowsAutomatically(true);
         settings.setLayoutAlgorithm(LayoutAlgorithm.NORMAL);
@@ -214,7 +214,7 @@ public class SystemWebViewEngine implements CordovaWebViewEngine {
 
     private void enableRemoteDebugging() {
         try {
-            WebView.setWebContentsDebuggingEnabled(true);
+            WebViewCompat.setWebContentsDebuggingEnabled(true);
         } catch (IllegalArgumentException e) {
             LOG.d(TAG, "You have one job! To turn on Remote Web Debugging! YOU HAVE FAILED! ");
             e.printStackTrace();
@@ -223,7 +223,7 @@ public class SystemWebViewEngine implements CordovaWebViewEngine {
 
     // Yeah, we know. It'd be great if lint was just a little smarter.
     @SuppressLint("AddJavascriptInterface")
-    private static void exposeJsInterface(WebView webView, CordovaBridge bridge) {
+    private static void exposeJsInterface(WebViewCompat webView, CordovaBridge bridge) {
         SystemExposedJsApi exposedJsApi = new SystemExposedJsApi(bridge);
         webView.addJavascriptInterface(exposedJsApi, "_cordovaNative");
     }

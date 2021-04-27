@@ -22,16 +22,16 @@ package org.apache.cordova.engine;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.webkit.CookieManager;
-import android.webkit.WebView;
+import androidx.webkit.WebViewCompat;
 
 import org.apache.cordova.ICordovaCookieManager;
 
 class SystemCookieManager implements ICordovaCookieManager {
 
-    protected final WebView webView;
+    protected final WebViewCompat webView;
     private final CookieManager cookieManager;
 
-    public SystemCookieManager(WebView webview) {
+    public SystemCookieManager(WebViewCompat webview) {
         webView = webview;
         cookieManager = CookieManager.getInstance();
 

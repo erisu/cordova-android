@@ -36,7 +36,7 @@ import android.webkit.JsResult;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebStorage;
-import android.webkit.WebView;
+import androidx.webkit.WebViewCompat;
 import android.webkit.PermissionRequest;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -50,7 +50,7 @@ import org.apache.cordova.LOG;
  * This class is the WebChromeClient that implements callbacks for our web view.
  * The kind of callbacks that happen here are on the chrome outside the document,
  * such as onCreateWindow(), onConsoleMessage(), onProgressChanged(), etc. Related
- * to but different than CordovaWebViewClient.
+ * to but different than CordovaWebViewClientCompat.
  */
 public class SystemWebChromeClient extends WebChromeClient {
 
@@ -78,7 +78,7 @@ public class SystemWebChromeClient extends WebChromeClient {
      * Tell the client to display a javascript alert dialog.
      */
     @Override
-    public boolean onJsAlert(WebView view, String url, String message, final JsResult result) {
+    public boolean onJsAlert(WebViewCompat view, String url, String message, final JsResult result) {
         dialogsHelper.showAlert(message, new CordovaDialogsHelper.Result() {
             @Override public void gotResult(boolean success, String value) {
                 if (success) {
@@ -95,7 +95,7 @@ public class SystemWebChromeClient extends WebChromeClient {
      * Tell the client to display a confirm dialog to the user.
      */
     @Override
-    public boolean onJsConfirm(WebView view, String url, String message, final JsResult result) {
+    public boolean onJsConfirm(WebViewCompat view, String url, String message, final JsResult result) {
         dialogsHelper.showConfirm(message, new CordovaDialogsHelper.Result() {
             @Override
             public void gotResult(boolean success, String value) {
@@ -118,7 +118,7 @@ public class SystemWebChromeClient extends WebChromeClient {
      * this purpose, perhaps we should hack console.log to do this instead!
      */
     @Override
-    public boolean onJsPrompt(WebView view, String origin, String message, String defaultValue, final JsPromptResult result) {
+    public boolean onJsPrompt(WebViewCompat view, String origin, String message, String defaultValue, final JsPromptResult result) {
         // Unlike the @JavascriptInterface bridge, this method is always called on the UI thread.
         String handledRet = parentEngine.bridge.promptOnJsPrompt(origin, message, defaultValue);
         if (handledRet != null) {
@@ -212,7 +212,7 @@ public class SystemWebChromeClient extends WebChromeClient {
     }
 
     @Override
-    public boolean onShowFileChooser(WebView webView, final ValueCallback<Uri[]> filePathsCallback, final WebChromeClient.FileChooserParams fileChooserParams) {
+    public boolean onShowFileChooser(WebViewCompat webView, final ValueCallback<Uri[]> filePathsCallback, final WebChromeClient.FileChooserParams fileChooserParams) {
         // Check if multiple-select is specified
         Boolean selectMultiple = false;
         if (fileChooserParams.getMode() == WebChromeClient.FileChooserParams.MODE_OPEN_MULTIPLE) {

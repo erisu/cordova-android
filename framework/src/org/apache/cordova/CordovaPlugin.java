@@ -233,7 +233,7 @@ public class CordovaPlugin {
      * false, then the request will proceed.
      *
      * Note that this only affects resource requests which are routed through
-     * WebViewClient.shouldInterceptRequest, such as XMLHttpRequest requests and
+     * WebViewClientCompat.shouldInterceptRequest, such as XMLHttpRequest requests and
      * img tag loads. WebSockets and media requests (such as <video> and <audio>
      * tags) are not affected by this method. Use CSP headers to control access
      * to such resources.

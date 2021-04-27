@@ -38,7 +38,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.webkit.WebViewClient;
+import androidx.webkit.WebViewClientCompat;
 import android.widget.FrameLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -391,7 +391,7 @@ public class CordovaActivity extends AppCompatActivity {
         }
         // If not, then display error dialog
         else {
-            final boolean exit = !(errorCode == WebViewClient.ERROR_HOST_LOOKUP);
+            final boolean exit = !(errorCode == WebViewClientCompat.ERROR_HOST_LOOKUP);
             me.runOnUiThread(new Runnable() {
                 public void run() {
                     if (exit) {
