@@ -33,7 +33,11 @@ import java.util.Map;
 public interface CordovaWebView {
     public static final String CORDOVA_VERSION = "10.0.0-dev";
 
-    void init(CordovaInterface cordova, List<PluginEntry> pluginEntries, CordovaPreferences preferences);
+    void init(
+        CordovaInterface cordova,
+        List<PluginEntry> pluginEntries,
+        CordovaPreferences preferences
+    );
 
     boolean isInitialized();
 
@@ -47,7 +51,9 @@ public interface CordovaWebView {
 
     void clearCache();
 
-    /** Use parameter-less overload */
+    /**
+     * Use parameter-less overload
+     */
     @Deprecated
     void clearCache(boolean b);
 
@@ -69,39 +75,44 @@ public interface CordovaWebView {
 
     /**
      * Send JavaScript statement back to JavaScript.
-     *
+     * <p>
      * Deprecated (https://issues.apache.org/jira/browse/CB-6851)
      * Instead of executing snippets of JS, you should use the exec bridge
      * to create a Java->JS communication channel.
      * To do this:
      * 1. Within plugin.xml (to have your JS run before deviceready):
-     *    <js-module><runs/></js-module>
+     * <js-module><runs/></js-module>
      * 2. Within your .js (call exec on start-up):
-     *    require('cordova/channel').onCordovaReady.subscribe(function() {
-     *      require('cordova/exec')(win, null, 'Plugin', 'method', []);
-     *      function win(message) {
-     *        ... process message from java here ...
-     *      }
-     *    });
+     * require('cordova/channel').onCordovaReady.subscribe(function() {
+     * require('cordova/exec')(win, null, 'Plugin', 'method', []);
+     * function win(message) {
+     * ... process message from java here ...
+     * }
+     * });
      * 3. Within your .java:
-     *    PluginResult dataResult = new PluginResult(PluginResult.Status.OK, CODE);
-     *    dataResult.setKeepCallback(true);
-     *    savedCallbackContext.sendPluginResult(dataResult);
+     * PluginResult dataResult = new PluginResult(PluginResult.Status.OK, CODE);
+     * dataResult.setKeepCallback(true);
+     * savedCallbackContext.sendPluginResult(dataResult);
      */
     @Deprecated
     void sendJavascript(String statememt);
 
     /**
      * Load the specified URL in the Cordova webview or a new browser instance.
-     *
+     * <p>
      * NOTE: If openExternal is false, only allow listed URLs can be loaded.
      *
-     * @param url           The url to load.
-     * @param openExternal  Load url in browser instead of Cordova webview.
-     * @param clearHistory  Clear the history stack, so new page becomes top of history
-     * @param params        Parameters for new app
+     * @param url The url to load.
+     * @param openExternal Load url in browser instead of Cordova webview.
+     * @param clearHistory Clear the history stack, so new page becomes top of history
+     * @param params Parameters for new app
      */
-    void showWebPage(String url, boolean openExternal, boolean clearHistory, Map<String, Object> params);
+    void showWebPage(
+        String url,
+        boolean openExternal,
+        boolean clearHistory,
+        Map<String, Object> params
+    );
 
     /**
      * Deprecated in 4.0.0. Use your own View-toggling logic.
@@ -124,19 +135,25 @@ public interface CordovaWebView {
     CordovaResourceApi getResourceApi();
 
     void setButtonPlumbedToJs(int keyCode, boolean override);
+
     boolean isButtonPlumbedToJs(int keyCode);
 
     void sendPluginResult(PluginResult cr, String callbackId);
 
     PluginManager getPluginManager();
+
     CordovaWebViewEngine getEngine();
+
     CordovaPreferences getPreferences();
+
     ICordovaCookieManager getCookieManager();
 
     String getUrl();
 
     // TODO: Work on deleting these by removing refs from plugins.
     Context getContext();
+
     void loadUrl(String url);
+
     Object postMessage(String id, Object data);
 }

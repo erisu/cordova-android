@@ -46,20 +46,20 @@ import java.util.zip.GZIPInputStream;
 /**
  * What this class provides:
  * 1. Helpers for reading & writing to URLs.
- *   - E.g. handles assets, resources, content providers, files, data URIs, http[s]
- *   - E.g. Can be used to query for mime-type & content length.
- *
+ * - E.g. handles assets, resources, content providers, files, data URIs, http[s]
+ * - E.g. Can be used to query for mime-type & content length.
+ * <p>
  * 2. To allow plugins to redirect URLs (via remapUrl).
- *   - All plugins should call remapUrl() on URLs they receive from JS *before*
- *     passing the URL onto other utility functions in this class.
- *   - For an example usage of this, refer to the org.apache.cordova.file plugin.
- *
+ * - All plugins should call remapUrl() on URLs they receive from JS *before*
+ * passing the URL onto other utility functions in this class.
+ * - For an example usage of this, refer to the org.apache.cordova.file plugin.
+ * <p>
  * Future Work:
- *   - Consider using a Cursor to query content URLs for their size (like the file plugin does).
- *   - Allow plugins to remapUri to "cdv-plugin://plugin-name/foo", which CordovaResourceApi
- *     would then delegate to pluginManager.getPlugin(plugin-name).openForRead(url)
- *     - Currently, plugins *can* do this by remapping to a data: URL, but it's inefficient
- *       for large payloads.
+ * - Consider using a Cursor to query content URLs for their size (like the file plugin does).
+ * - Allow plugins to remapUri to "cdv-plugin://plugin-name/foo", which CordovaResourceApi
+ * would then delegate to pluginManager.getPlugin(plugin-name).openForRead(url)
+ * - Currently, plugins *can* do this by remapping to a data: URL, but it's inefficient
+ * for large payloads.
  */
 public class CordovaResourceApi {
     @SuppressWarnings("unused")
@@ -155,7 +155,7 @@ public class CordovaResourceApi {
                 Cursor cursor = contentResolver.query(uri, LOCAL_FILE_PROJECTION, null, null, null);
                 if (cursor != null) {
                     try {
-                        int columnIndex = cursor.getColumnIndex(LOCAL_FILE_PROJECTION[0]);
+                        int columnIndex = cursor.getColumnIndex(LOCAL_FILE_PROJECTION[ 0 ]);
                         if (columnIndex != -1 && cursor.getCount() > 0) {
                             cursor.moveToFirst();
                             String realPath = cursor.getString(columnIndex);
@@ -186,12 +186,12 @@ public class CordovaResourceApi {
             case URI_TYPE_HTTP:
             case URI_TYPE_HTTPS: {
                 try {
-                    HttpURLConnection conn = (HttpURLConnection)new URL(uri.toString()).openConnection();
+                    HttpURLConnection conn = (HttpURLConnection) new URL(uri.toString()).openConnection();
                     conn.setDoInput(false);
                     conn.setRequestMethod("HEAD");
                     String mimeType = conn.getHeaderField("Content-Type");
                     if (mimeType != null) {
-                        mimeType = mimeType.split(";")[0];
+                        mimeType = mimeType.split(";")[ 0 ];
                     }
                     return mimeType;
                 } catch (IOException e) {
@@ -223,9 +223,11 @@ public class CordovaResourceApi {
 
     /**
      * Opens a stream to the given URI, also providing the MIME type & length.
+     *
      * @return Never returns null.
+     *
      * @throws Throws an InvalidArgumentException for relative URIs. Relative URIs should be
-     *     resolved before being passed into this function.
+     * resolved before being passed into this function.
      * @throws Throws an IOException if the URI cannot be opened.
      * @throws Throws an IllegalStateException if called on a foreground thread.
      */
@@ -235,9 +237,11 @@ public class CordovaResourceApi {
 
     /**
      * Opens a stream to the given URI, also providing the MIME type & length.
+     *
      * @return Never returns null.
+     *
      * @throws Throws an InvalidArgumentException for relative URIs. Relative URIs should be
-     *     resolved before being passed into this function.
+     * resolved before being passed into this function.
      * @throws Throws an IOException if the URI cannot be opened.
      * @throws Throws an IllegalStateException if called on a foreground thread and skipThreadCheck is false.
      */
@@ -286,12 +290,12 @@ public class CordovaResourceApi {
             }
             case URI_TYPE_HTTP:
             case URI_TYPE_HTTPS: {
-                HttpURLConnection conn = (HttpURLConnection)new URL(uri.toString()).openConnection();
+                HttpURLConnection conn = (HttpURLConnection) new URL(uri.toString()).openConnection();
                 conn.setRequestProperty("Accept-Encoding", "gzip");
                 conn.setDoInput(true);
                 String mimeType = conn.getHeaderField("Content-Type");
                 if (mimeType != null) {
-                    mimeType = mimeType.split(";")[0];
+                    mimeType = mimeType.split(";")[ 0 ];
                 }
                 int length = conn.getContentLength();
                 InputStream inputStream;
@@ -320,9 +324,11 @@ public class CordovaResourceApi {
 
     /**
      * Opens a stream to the given URI.
+     *
      * @return Never returns null.
+     *
      * @throws Throws an InvalidArgumentException for relative URIs. Relative URIs should be
-     *     resolved before being passed into this function.
+     * resolved before being passed into this function.
      * @throws Throws an IOException if the URI cannot be opened.
      */
     public OutputStream openOutputStream(Uri uri, boolean append) throws IOException {
@@ -338,7 +344,12 @@ public class CordovaResourceApi {
             }
             case URI_TYPE_CONTENT:
             case URI_TYPE_RESOURCE: {
-                AssetFileDescriptor assetFd = contentResolver.openAssetFileDescriptor(uri, append ? "wa" : "w");
+                AssetFileDescriptor assetFd = contentResolver.openAssetFileDescriptor(
+                    uri,
+                    append
+                        ? "wa"
+                        : "w"
+                );
                 return assetFd.createOutputStream();
             }
         }
@@ -347,18 +358,21 @@ public class CordovaResourceApi {
 
     public HttpURLConnection createHttpConnection(Uri uri) throws IOException {
         assertBackgroundThread();
-        return (HttpURLConnection)new URL(uri.toString()).openConnection();
+        return (HttpURLConnection) new URL(uri.toString()).openConnection();
     }
 
     // Copies the input to the output in the most efficient manner possible.
     // Closes both streams.
-    public void copyResource(OpenForReadResult input, OutputStream outputStream) throws IOException {
+    public void copyResource(
+        OpenForReadResult input,
+        OutputStream outputStream
+    ) throws IOException {
         assertBackgroundThread();
         try {
             InputStream inputStream = input.inputStream;
             if (inputStream instanceof FileInputStream && outputStream instanceof FileOutputStream) {
-                FileChannel inChannel = ((FileInputStream)input.inputStream).getChannel();
-                FileChannel outChannel = ((FileOutputStream)outputStream).getChannel();
+                FileChannel inChannel = ((FileInputStream) input.inputStream).getChannel();
+                FileChannel outChannel = ((FileOutputStream) outputStream).getChannel();
                 long offset = 0;
                 long length = input.length;
                 if (input.assetFd != null) {
@@ -370,9 +384,9 @@ public class CordovaResourceApi {
                 outChannel.transferFrom(inChannel, 0, length);
             } else {
                 final int BUFFER_SIZE = 8192;
-                byte[] buffer = new byte[BUFFER_SIZE];
+                byte[] buffer = new byte[ BUFFER_SIZE ];
 
-                for (;;) {
+                for (; ; ) {
                     int bytesRead = inputStream.read(buffer, 0, BUFFER_SIZE);
 
                     if (bytesRead <= 0) {
@@ -402,10 +416,12 @@ public class CordovaResourceApi {
         if (threadCheckingEnabled) {
             Thread curThread = Thread.currentThread();
             if (curThread == Looper.getMainLooper().getThread()) {
-                throw new IllegalStateException("Do not perform IO operations on the UI thread. Use CordovaInterface.getThreadPool() instead.");
+                throw new IllegalStateException(
+                    "Do not perform IO operations on the UI thread. Use CordovaInterface.getThreadPool() instead.");
             }
             if (curThread == jsThread) {
-                throw new IllegalStateException("Tried to perform an IO operation on the WebCore thread. Use CordovaInterface.getThreadPool() instead.");
+                throw new IllegalStateException(
+                    "Tried to perform an IO operation on the WebCore thread. Use CordovaInterface.getThreadPool() instead.");
             }
         }
     }
@@ -418,7 +434,7 @@ public class CordovaResourceApi {
         }
         String[] mimeParts = uriAsString.substring(0, commaPos).split(";");
         if (mimeParts.length > 0) {
-            return mimeParts[0];
+            return mimeParts[ 0 ];
         }
         return null;
     }
@@ -433,10 +449,10 @@ public class CordovaResourceApi {
         String contentType = null;
         boolean base64 = false;
         if (mimeParts.length > 0) {
-            contentType = mimeParts[0];
+            contentType = mimeParts[ 0 ];
         }
         for (int i = 1; i < mimeParts.length; ++i) {
-            if ("base64".equalsIgnoreCase(mimeParts[i])) {
+            if ("base64".equalsIgnoreCase(mimeParts[ i ])) {
                 base64 = true;
             }
         }
@@ -468,7 +484,13 @@ public class CordovaResourceApi {
         public final long length;
         public final AssetFileDescriptor assetFd;
 
-        public OpenForReadResult(Uri uri, InputStream inputStream, String mimeType, long length, AssetFileDescriptor assetFd) {
+        public OpenForReadResult(
+            Uri uri,
+            InputStream inputStream,
+            String mimeType,
+            long length,
+            AssetFileDescriptor assetFd
+        ) {
             this.uri = uri;
             this.inputStream = inputStream;
             this.mimeType = mimeType;

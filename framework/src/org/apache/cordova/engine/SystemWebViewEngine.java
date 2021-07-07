@@ -46,9 +46,9 @@ import org.apache.cordova.PluginManager;
 /**
  * Glue class between CordovaWebView (main Cordova logic) and SystemWebView (the actual View).
  * We make the Engine separate from the actual View so that:
- *  A) We don't need to worry about WebView methods clashing with CordovaWebViewEngine methods
- *     (e.g.: goBack() is void for WebView, and boolean for CordovaWebViewEngine)
- *  B) Separating the actual View from the Engine makes API surfaces smaller.
+ * A) We don't need to worry about WebView methods clashing with CordovaWebViewEngine methods
+ * (e.g.: goBack() is void for WebView, and boolean for CordovaWebViewEngine)
+ * B) Separating the actual View from the Engine makes API surfaces smaller.
  * Class uses two-phase initialization. However, CordovaWebView is responsible for calling .init().
  */
 public class SystemWebViewEngine implements CordovaWebViewEngine {
@@ -66,7 +66,9 @@ public class SystemWebViewEngine implements CordovaWebViewEngine {
     protected NativeToJsMessageQueue nativeToJsMessageQueue;
     private BroadcastReceiver receiver;
 
-    /** Used when created via reflection. */
+    /**
+     * Used when created via reflection.
+     */
     public SystemWebViewEngine(Context context, CordovaPreferences preferences) {
         this(new SystemWebView(context), preferences);
     }
@@ -82,9 +84,11 @@ public class SystemWebViewEngine implements CordovaWebViewEngine {
     }
 
     @Override
-    public void init(CordovaWebView parentWebView, CordovaInterface cordova, CordovaWebViewEngine.Client client,
-              CordovaResourceApi resourceApi, PluginManager pluginManager,
-              NativeToJsMessageQueue nativeToJsMessageQueue) {
+    public void init(
+        CordovaWebView parentWebView, CordovaInterface cordova, CordovaWebViewEngine.Client client,
+        CordovaResourceApi resourceApi, PluginManager pluginManager,
+        NativeToJsMessageQueue nativeToJsMessageQueue
+    ) {
         if (this.cordova != null) {
             throw new IllegalStateException();
         }
@@ -107,16 +111,20 @@ public class SystemWebViewEngine implements CordovaWebViewEngine {
             public void setNetworkAvailable(boolean value) {
                 //sometimes this can be called after calling webview.destroy() on destroy()
                 //thus resulting in a NullPointerException
-                if(webView!=null) {
-                   webView.setNetworkAvailable(value);
+                if (webView != null) {
+                    webView.setNetworkAvailable(value);
                 }
             }
+
             @Override
             public void runOnUiThread(Runnable r) {
                 SystemWebViewEngine.this.cordova.getActivity().runOnUiThread(r);
             }
         }));
-        nativeToJsMessageQueue.addBridgeMode(new NativeToJsMessageQueue.EvalBridgeMode(this, cordova));
+        nativeToJsMessageQueue.addBridgeMode(new NativeToJsMessageQueue.EvalBridgeMode(
+            this,
+            cordova
+        ));
         bridge = new CordovaBridge(pluginManager, nativeToJsMessageQueue);
         exposeJsInterface(webView, bridge);
     }
@@ -136,7 +144,7 @@ public class SystemWebViewEngine implements CordovaWebViewEngine {
         return webView;
     }
 
-    @SuppressLint({"NewApi", "SetJavaScriptEnabled"})
+    @SuppressLint({ "NewApi", "SetJavaScriptEnabled" })
     @SuppressWarnings("deprecation")
     private void initWebViewSettings() {
         webView.setInitialScale(0);
@@ -166,7 +174,10 @@ public class SystemWebViewEngine implements CordovaWebViewEngine {
 
         // Enable database
         // We keep this disabled because we use or shim to get around DOM_EXCEPTION_ERROR_16
-        String databasePath = webView.getContext().getApplicationContext().getDir("database", Context.MODE_PRIVATE).getPath();
+        String databasePath = webView.getContext()
+            .getApplicationContext()
+            .getDir("database", Context.MODE_PRIVATE)
+            .getPath();
         settings.setDatabaseEnabled(true);
         settings.setDatabasePath(databasePath);
 

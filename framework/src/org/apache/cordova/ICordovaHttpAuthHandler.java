@@ -22,11 +22,11 @@ package org.apache.cordova;
  * Specifies interface for HTTP auth handler object which is used to handle auth requests and
  * specifying user credentials.
  */
- public interface ICordovaHttpAuthHandler {
+public interface ICordovaHttpAuthHandler {
     /**
      * Instructs the WebView to cancel the authentication request.
      */
-    public void cancel ();
+    public void cancel();
 
     /**
      * Instructs the WebView to proceed with the authentication with the given credentials.
@@ -34,5 +34,5 @@ package org.apache.cordova;
      * @param username The user name
      * @param password The password
      */
-    public void proceed (String username, String password);
+    public void proceed(String username, String password);
 }

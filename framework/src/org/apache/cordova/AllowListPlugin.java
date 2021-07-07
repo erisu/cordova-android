@@ -45,7 +45,11 @@ public class AllowListPlugin extends CordovaPlugin {
         new CustomConfigXmlParser().parse(xmlParser);
     }
 
-    public AllowListPlugin(AllowList allowedNavigations, AllowList allowedIntents, AllowList allowedRequests) {
+    public AllowListPlugin(
+        AllowList allowedNavigations,
+        AllowList allowedIntents,
+        AllowList allowedRequests
+    ) {
         if (allowedRequests == null) {
             allowedRequests = new AllowList();
             allowedRequests.addAllowListEntry("file:///*", false);
@@ -96,7 +100,10 @@ public class AllowListPlugin extends CordovaPlugin {
                         allowedRequests.addAllowListEntry("https://*/*", false);
                     } else {
                         String subdomains = xml.getAttributeValue(null, "subdomains");
-                        allowedRequests.addAllowListEntry(origin, (subdomains != null) && (subdomains.compareToIgnoreCase("true") == 0));
+                        allowedRequests.addAllowListEntry(
+                            origin,
+                            (subdomains != null) && (subdomains.compareToIgnoreCase("true") == 0)
+                        );
                     }
                 }
             }

@@ -22,7 +22,7 @@ import android.util.Log;
 
 /**
  * Log to Android logging system.
- *
+ * <p>
  * Log message can be a string or a printf formatted string with arguments.
  * See http://developer.android.com/reference/java/util/Formatter.html
  */
@@ -65,6 +65,7 @@ public class LOG {
      * Determine if log level will be logged
      *
      * @param logLevel
+     *
      * @return true if the parameter passed in is greater than or equal to the current log level
      */
     public static boolean isLoggable(int logLevel) {

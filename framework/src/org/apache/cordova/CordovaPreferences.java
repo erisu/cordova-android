@@ -72,7 +72,7 @@ public class CordovaPreferences {
         String value = prefs.get(name);
         if (value != null) {
             // Use Integer.decode() can't handle it if the highest bit is set.
-            return (int)(long)Long.decode(value);
+            return (int) (long) Long.decode(value);
         }
         return defaultValue;
     }

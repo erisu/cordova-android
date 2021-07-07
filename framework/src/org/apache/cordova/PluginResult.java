@@ -34,7 +34,7 @@ public class PluginResult {
     private List<PluginResult> multipartMessages;
 
     public PluginResult(Status status) {
-        this(status, PluginResult.StatusMessages[status.ordinal()]);
+        this(status, PluginResult.StatusMessages[ status.ordinal() ]);
     }
 
     public PluginResult(Status status, String message) {
@@ -58,13 +58,13 @@ public class PluginResult {
     public PluginResult(Status status, int i) {
         this.status = status.ordinal();
         this.messageType = MESSAGE_TYPE_NUMBER;
-        this.encodedMessage = ""+i;
+        this.encodedMessage = "" + i;
     }
 
     public PluginResult(Status status, float f) {
         this.status = status.ordinal();
         this.messageType = MESSAGE_TYPE_NUMBER;
-        this.encodedMessage = ""+f;
+        this.encodedMessage = "" + f;
     }
 
     public PluginResult(Status status, boolean b) {
@@ -138,11 +138,12 @@ public class PluginResult {
     public String toCallbackString(String callbackId) {
         // If no result to be sent and keeping callback, then no need to sent back to JavaScript
         if ((status == PluginResult.Status.NO_RESULT.ordinal()) && keepCallback) {
-        	return null;
+            return null;
         }
 
         // Check the success (OK, NO_RESULT & !KEEP_CALLBACK)
-        if ((status == PluginResult.Status.OK.ordinal()) || (status == PluginResult.Status.NO_RESULT.ordinal())) {
+        if ((status == PluginResult.Status.OK.ordinal()) || (status == PluginResult.Status.NO_RESULT
+            .ordinal())) {
             return toSuccessCallbackString(callbackId);
         }
 
@@ -151,12 +152,12 @@ public class PluginResult {
 
     @Deprecated // Use sendPluginResult instead of sendJavascript.
     public String toSuccessCallbackString(String callbackId) {
-        return "cordova.callbackSuccess('"+callbackId+"',"+this.getJSONString()+");";
+        return "cordova.callbackSuccess('" + callbackId + "'," + this.getJSONString() + ");";
     }
 
     @Deprecated // Use sendPluginResult instead of sendJavascript.
     public String toErrorCallbackString(String callbackId) {
-        return "cordova.callbackError('"+callbackId+"', " + this.getJSONString()+ ");";
+        return "cordova.callbackError('" + callbackId + "', " + this.getJSONString() + ");";
     }
 
     public static final int MESSAGE_TYPE_STRING = 1;

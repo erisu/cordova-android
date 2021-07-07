@@ -40,7 +40,11 @@ public class ResumeCallback extends CallbackContext {
     public void sendPluginResult(PluginResult pluginResult) {
         synchronized (this) {
             if (finished) {
-                LOG.w(TAG, serviceName + " attempted to send a second callback to ResumeCallback\nResult was: " + pluginResult.getMessage());
+                LOG.w(
+                    TAG,
+                    serviceName + " attempted to send a second callback to ResumeCallback\nResult was: " + pluginResult
+                        .getMessage()
+                );
                 return;
             } else {
                 finished = true;
@@ -52,7 +56,10 @@ public class ResumeCallback extends CallbackContext {
 
         try {
             pluginResultObject.put("pluginServiceName", this.serviceName);
-            pluginResultObject.put("pluginStatus", PluginResult.StatusMessages[pluginResult.getStatus()]);
+            pluginResultObject.put(
+                "pluginStatus",
+                PluginResult.StatusMessages[ pluginResult.getStatus() ]
+            );
 
             event.put("action", "resume");
             event.put("pendingResult", pluginResultObject);

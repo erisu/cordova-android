@@ -78,7 +78,8 @@ public class SystemWebChromeClient extends WebChromeClient {
     @Override
     public boolean onJsAlert(WebView view, String url, String message, final JsResult result) {
         dialogsHelper.showAlert(message, new CordovaDialogsHelper.Result() {
-            @Override public void gotResult(boolean success, String value) {
+            @Override
+            public void gotResult(boolean success, String value) {
                 if (success) {
                     result.confirm();
                 } else {
@@ -111,12 +112,18 @@ public class SystemWebChromeClient extends WebChromeClient {
      * Tell the client to display a prompt dialog to the user.
      * If the client returns true, WebView will assume that the client will
      * handle the prompt dialog and call the appropriate JsPromptResult method.
-     *
+     * <p>
      * Since we are hacking prompts for our own purposes, we should not be using them for
      * this purpose, perhaps we should hack console.log to do this instead!
      */
     @Override
-    public boolean onJsPrompt(WebView view, String origin, String message, String defaultValue, final JsPromptResult result) {
+    public boolean onJsPrompt(
+        WebView view,
+        String origin,
+        String message,
+        String defaultValue,
+        final JsPromptResult result
+    ) {
         // Unlike the @JavascriptInterface bridge, this method is always called on the UI thread.
         String handledRet = parentEngine.bridge.promptOnJsPrompt(origin, message, defaultValue);
         if (handledRet != null) {
@@ -141,10 +148,17 @@ public class SystemWebChromeClient extends WebChromeClient {
      */
     @Override
     @SuppressWarnings("deprecation")
-    public void onExceededDatabaseQuota(String url, String databaseIdentifier, long currentQuota, long estimatedSize,
-            long totalUsedQuota, WebStorage.QuotaUpdater quotaUpdater)
-    {
-        LOG.d(LOG_TAG, "onExceededDatabaseQuota estimatedSize: %d  currentQuota: %d  totalUsedQuota: %d", estimatedSize, currentQuota, totalUsedQuota);
+    public void onExceededDatabaseQuota(
+        String url, String databaseIdentifier, long currentQuota, long estimatedSize,
+        long totalUsedQuota, WebStorage.QuotaUpdater quotaUpdater
+    ) {
+        LOG.d(
+            LOG_TAG,
+            "onExceededDatabaseQuota estimatedSize: %d  currentQuota: %d  totalUsedQuota: %d",
+            estimatedSize,
+            currentQuota,
+            totalUsedQuota
+        );
         quotaUpdater.updateQuota(MAX_QUOTA);
     }
 
@@ -162,8 +176,7 @@ public class SystemWebChromeClient extends WebChromeClient {
         callback.invoke(origin, true, false);
         //Get the plugin, it should be loaded
         CordovaPlugin geolocation = parentEngine.pluginManager.getPlugin("Geolocation");
-        if(geolocation != null && !geolocation.hasPermisssion())
-        {
+        if (geolocation != null && !geolocation.hasPermisssion()) {
             geolocation.requestPermissions(0);
         }
     }
@@ -194,12 +207,18 @@ public class SystemWebChromeClient extends WebChromeClient {
             // create the linear layout
             LinearLayout layout = new LinearLayout(parentEngine.getView().getContext());
             layout.setOrientation(LinearLayout.VERTICAL);
-            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
+                LayoutParams.WRAP_CONTENT,
+                LayoutParams.WRAP_CONTENT
+            );
             layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
             layout.setLayoutParams(layoutParams);
             // the proress bar
             ProgressBar bar = new ProgressBar(parentEngine.getView().getContext());
-            LinearLayout.LayoutParams barLayoutParams = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+            LinearLayout.LayoutParams barLayoutParams = new LinearLayout.LayoutParams(
+                LayoutParams.WRAP_CONTENT,
+                LayoutParams.WRAP_CONTENT
+            );
             barLayoutParams.gravity = Gravity.CENTER;
             bar.setLayoutParams(barLayoutParams);
             layout.addView(bar);
@@ -210,7 +229,11 @@ public class SystemWebChromeClient extends WebChromeClient {
     }
 
     @Override
-    public boolean onShowFileChooser(WebView webView, final ValueCallback<Uri[]> filePathsCallback, final WebChromeClient.FileChooserParams fileChooserParams) {
+    public boolean onShowFileChooser(
+        WebView webView,
+        final ValueCallback<Uri[]> filePathsCallback,
+        final WebChromeClient.FileChooserParams fileChooserParams
+    ) {
         // Check if multiple-select is specified
         Boolean selectMultiple = false;
         if (fileChooserParams.getMode() == WebChromeClient.FileChooserParams.MODE_OPEN_MULTIPLE) {
@@ -218,7 +241,7 @@ public class SystemWebChromeClient extends WebChromeClient {
         }
         Intent intent = fileChooserParams.createIntent();
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, selectMultiple);
-        
+
         // Uses Intent.EXTRA_MIME_TYPES to pass multiple mime types.
         String[] acceptTypes = fileChooserParams.getAcceptTypes();
         if (acceptTypes.length > 1) {
@@ -230,19 +253,21 @@ public class SystemWebChromeClient extends WebChromeClient {
                 @Override
                 public void onActivityResult(int requestCode, int resultCode, Intent intent) {
                     Uri[] result = null;
-                    if (resultCode ==  Activity.RESULT_OK && intent != null) {
+                    if (resultCode == Activity.RESULT_OK && intent != null) {
                         if (intent.getClipData() != null) {
                             // handle multiple-selected files
                             final int numSelectedFiles = intent.getClipData().getItemCount();
-                            result = new Uri[numSelectedFiles];
+                            result = new Uri[ numSelectedFiles ];
                             for (int i = 0; i < numSelectedFiles; i++) {
-                                result[i] = intent.getClipData().getItemAt(i).getUri();
-                                LOG.d(LOG_TAG, "Receive file chooser URL: " + result[i]);
+                                result[ i ] = intent.getClipData().getItemAt(i).getUri();
+                                LOG.d(LOG_TAG, "Receive file chooser URL: " + result[ i ]);
                             }
-                        }
-                        else if (intent.getData() != null) {
+                        } else if (intent.getData() != null) {
                             // handle single-selected file
-                            result = WebChromeClient.FileChooserParams.parseResult(resultCode, intent);
+                            result = WebChromeClient.FileChooserParams.parseResult(
+                                resultCode,
+                                intent
+                            );
                             LOG.d(LOG_TAG, "Receive file chooser URL: " + result);
                         }
                     }
@@ -262,7 +287,7 @@ public class SystemWebChromeClient extends WebChromeClient {
         request.grant(request.getResources());
     }
 
-    public void destroyLastDialog(){
+    public void destroyLastDialog() {
         dialogsHelper.destroyLastDialog();
     }
 }

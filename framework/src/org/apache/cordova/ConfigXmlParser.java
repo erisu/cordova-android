@@ -47,7 +47,7 @@ public class ConfigXmlParser {
 
     public String getLaunchUrl() {
         if (launchUrl == null) {
-            launchUrl = "https://" +  this.prefs.getString("hostname", "localhost");
+            launchUrl = "https://" + this.prefs.getString("hostname", "localhost");
         }
 
         if (this.prefs.getBoolean("AndroidInsecureFileModeEnabled", false)) {
@@ -59,7 +59,8 @@ public class ConfigXmlParser {
 
     public void parse(Context action) {
         // First checking the class namespace for config.xml
-        int id = action.getResources().getIdentifier("config", "xml", action.getClass().getPackage().getName());
+        int id = action.getResources()
+            .getIdentifier("config", "xml", action.getClass().getPackage().getName());
         if (id == 0) {
             // If we couldn't find config.xml there, we'll look in the namespace from AndroidManifest.xml
             id = action.getResources().getIdentifier("config", "xml", action.getPackageName());
@@ -90,9 +91,7 @@ public class ConfigXmlParser {
         while (eventType != XmlPullParser.END_DOCUMENT) {
             if (eventType == XmlPullParser.START_TAG) {
                 handleStartTag(xml);
-            }
-            else if (eventType == XmlPullParser.END_TAG)
-            {
+            } else if (eventType == XmlPullParser.END_TAG) {
                 handleEndTag(xml);
             }
             try {
@@ -112,22 +111,19 @@ public class ConfigXmlParser {
             //Set the bit for reading params
             insideFeature = true;
             service = xml.getAttributeValue(null, "name");
-        }
-        else if (insideFeature && strNode.equals("param")) {
+        } else if (insideFeature && strNode.equals("param")) {
             paramType = xml.getAttributeValue(null, "name");
             if (paramType.equals("service")) // check if it is using the older service param
                 service = xml.getAttributeValue(null, "value");
             else if (paramType.equals("package") || paramType.equals("android-package"))
-                pluginClass = xml.getAttributeValue(null,"value");
+                pluginClass = xml.getAttributeValue(null, "value");
             else if (paramType.equals("onload"))
                 onload = "true".equals(xml.getAttributeValue(null, "value"));
-        }
-        else if (strNode.equals("preference")) {
+        } else if (strNode.equals("preference")) {
             String name = xml.getAttributeValue(null, "name").toLowerCase(Locale.ENGLISH);
             String value = xml.getAttributeValue(null, "value");
             prefs.set(name, value);
-        }
-        else if (strNode.equals("content")) {
+        } else if (strNode.equals("content")) {
             String src = xml.getAttributeValue(null, "src");
             if (src != null) {
                 setStartUrl(src);
@@ -159,7 +155,7 @@ public class ConfigXmlParser {
             if (this.prefs.getBoolean("AndroidInsecureFileModeEnabled", false)) {
                 launchUrl = "file:///android_asset/www/" + src;
             } else {
-                launchUrl = "https://" +  this.prefs.getString("hostname", "localhost") + "/" + src;
+                launchUrl = "https://" + this.prefs.getString("hostname", "localhost") + "/" + src;
             }
         }
     }

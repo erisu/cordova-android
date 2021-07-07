@@ -36,7 +36,7 @@ public class AllowList {
         private String regexFromPattern(String pattern, boolean allowWildcards) {
             final String toReplace = "\\.[]{}()^$?+|";
             StringBuilder regex = new StringBuilder();
-            for (int i=0; i < pattern.length(); i++) {
+            for (int i = 0; i < pattern.length(); i++) {
                 char c = pattern.charAt(i);
                 if (c == '*' && allowWildcards) {
                     regex.append(".");
@@ -48,24 +48,36 @@ public class AllowList {
             return regex.toString();
         }
 
-        public URLPattern(String scheme, String host, String port, String path) throws MalformedURLException {
+        public URLPattern(
+            String scheme,
+            String host,
+            String port,
+            String path
+        ) throws MalformedURLException {
             try {
                 if (scheme == null || "*".equals(scheme)) {
                     this.scheme = null;
                 } else {
-                    this.scheme = Pattern.compile(regexFromPattern(scheme, false), Pattern.CASE_INSENSITIVE);
+                    this.scheme = Pattern.compile(
+                        regexFromPattern(scheme, false),
+                        Pattern.CASE_INSENSITIVE
+                    );
                 }
                 if ("*".equals(host)) {
                     this.host = null;
                 } else if (host.startsWith("*.")) {
-                    this.host = Pattern.compile("([a-z0-9.-]*\\.)?" + regexFromPattern(host.substring(2), false), Pattern.CASE_INSENSITIVE);
+                    this.host = Pattern.compile("([a-z0-9.-]*\\.)?" + regexFromPattern(host.substring(
+                        2), false), Pattern.CASE_INSENSITIVE);
                 } else {
-                    this.host = Pattern.compile(regexFromPattern(host, false), Pattern.CASE_INSENSITIVE);
+                    this.host = Pattern.compile(
+                        regexFromPattern(host, false),
+                        Pattern.CASE_INSENSITIVE
+                    );
                 }
                 if (port == null || "*".equals(port)) {
                     this.port = null;
                 } else {
-                    this.port = Integer.parseInt(port,10);
+                    this.port = Integer.parseInt(port, 10);
                 }
                 if (path == null || "/*".equals(path)) {
                     this.path = null;
@@ -80,9 +92,9 @@ public class AllowList {
         public boolean matches(Uri uri) {
             try {
                 return ((scheme == null || scheme.matcher(uri.getScheme()).matches()) &&
-                        (host == null || host.matcher(uri.getHost()).matches()) &&
-                        (port == null || port.equals(uri.getPort())) &&
-                        (path == null || path.matcher(uri.getPath()).matches()));
+                    (host == null || host.matcher(uri.getHost()).matches()) &&
+                    (port == null || port.equals(uri.getPort())) &&
+                    (path == null || path.matcher(uri.getPath()).matches()));
             } catch (Exception e) {
                 LOG.d(TAG, e.toString());
                 return false;
@@ -116,15 +128,16 @@ public class AllowList {
                 if (origin.compareTo("*") == 0) {
                     LOG.d(TAG, "Unlimited access to network resources");
                     allowList = null;
-                }
-                else { // specific access
-                    Pattern parts = Pattern.compile("^((\\*|[A-Za-z-]+):(//)?)?(\\*|((\\*\\.)?[^*/:]+))?(:(\\d+))?(/.*)?");
+                } else { // specific access
+                    Pattern parts = Pattern.compile(
+                        "^((\\*|[A-Za-z-]+):(//)?)?(\\*|((\\*\\.)?[^*/:]+))?(:(\\d+))?(/.*)?");
                     Matcher m = parts.matcher(origin);
                     if (m.matches()) {
                         String scheme = m.group(2);
                         String host = m.group(4);
                         // Special case for two urls which are allowed to have empty hosts
-                        if (("file".equals(scheme) || "content".equals(scheme)) && host == null) host = "*";
+                        if (("file".equals(scheme) || "content".equals(scheme)) && host == null)
+                            host = "*";
                         String port = m.group(8);
                         String path = m.group(9);
                         if (scheme == null) {
@@ -147,6 +160,7 @@ public class AllowList {
      * Determine if URL is in approved list of URLs to load.
      *
      * @param uri
+     *
      * @return true if wide open or allow listed
      */
     public boolean isUrlAllowListed(String uri) {

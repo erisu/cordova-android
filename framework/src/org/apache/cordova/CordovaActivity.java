@@ -47,7 +47,7 @@ import java.util.Locale;
  * This class is the main Android activity that represents the Cordova
  * application. It should be extended by the user to load the specific
  * html file that contains the application.
- *
+ * <p>
  * As an example:
  *
  * <pre>
@@ -66,13 +66,12 @@ import java.util.Locale;
  *       }
  *     }
  * </pre>
- *
+ * <p>
  * Cordova xml configuration: Cordova uses a configuration file at
  * res/xml/config.xml to specify its settings. See "The config.xml File"
  * guide in cordova-docs at http://cordova.apache.org/docs for the documentation
  * for the configuration. The use of the set*Property() methods is
  * deprecated in favor of the config.xml file.
- *
  */
 public class CordovaActivity extends AppCompatActivity {
     public static String TAG = "CordovaActivity";
@@ -109,7 +108,10 @@ public class CordovaActivity extends AppCompatActivity {
         String logLevel = preferences.getString("loglevel", "ERROR");
         LOG.setLogLevel(logLevel);
 
-        LOG.i(TAG, "Apache Cordova native platform version " + CordovaWebView.CORDOVA_VERSION + " is starting");
+        LOG.i(
+            TAG,
+            "Apache Cordova native platform version " + CordovaWebView.CORDOVA_VERSION + " is starting"
+        );
         LOG.d(TAG, "CordovaActivity.onCreate()");
 
         if (!preferences.getBoolean("ShowTitle", false)) {
@@ -117,7 +119,10 @@ public class CordovaActivity extends AppCompatActivity {
         }
 
         if (preferences.getBoolean("SetFullscreen", false)) {
-            LOG.d(TAG, "The SetFullscreen configuration is deprecated in favor of Fullscreen, and will be removed in a future version.");
+            LOG.d(
+                TAG,
+                "The SetFullscreen configuration is deprecated in favor of Fullscreen, and will be removed in a future version."
+            );
             preferences.set("Fullscreen", true);
         }
         if (preferences.getBoolean("Fullscreen", false)) {
@@ -129,12 +134,16 @@ public class CordovaActivity extends AppCompatActivity {
                 // the nav and title bars from flashing in.
                 setImmersiveUiVisibility();
             } else {
-                getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                        WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                getWindow().setFlags(
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN
+                );
             }
         } else {
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN,
-                    WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+            getWindow().setFlags(
+                WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN
+            );
         }
 
         super.onCreate(savedInstanceState);
@@ -172,13 +181,14 @@ public class CordovaActivity extends AppCompatActivity {
     }
 
     //Suppressing warnings in AndroidStudio
-    @SuppressWarnings({"deprecation", "ResourceType"})
+    @SuppressWarnings({ "deprecation", "ResourceType" })
     protected void createViews() {
         //Why are we setting a constant as the ID? This should be investigated
         appView.getView().setId(100);
         appView.getView().setLayoutParams(new FrameLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT));
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        ));
 
         setContentView(appView.getView());
 
@@ -187,8 +197,7 @@ public class CordovaActivity extends AppCompatActivity {
                 int backgroundColor = preferences.getInteger("BackgroundColor", Color.BLACK);
                 // Background of activity:
                 appView.getView().setBackgroundColor(backgroundColor);
-            }
-            catch (NumberFormatException e){
+            } catch (NumberFormatException e) {
                 e.printStackTrace();
             }
         }
@@ -271,7 +280,7 @@ public class CordovaActivity extends AppCompatActivity {
         if (this.appView == null) {
             return;
         }
-        if (! this.getWindow().getDecorView().hasFocus()) {
+        if (!this.getWindow().getDecorView().hasFocus()) {
             // Force window to have focus, so application always
             // receive user input. Workaround for some devices (Samsung Galaxy Note 3 at least)
             this.getWindow().getDecorView().requestFocus();
@@ -335,11 +344,11 @@ public class CordovaActivity extends AppCompatActivity {
     @SuppressLint("InlinedApi")
     protected void setImmersiveUiVisibility() {
         final int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+            | View.SYSTEM_UI_FLAG_FULLSCREEN
+            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
 
         getWindow().getDecorView().setSystemUiVisibility(uiOptions);
     }
@@ -357,9 +366,9 @@ public class CordovaActivity extends AppCompatActivity {
      * the resultCode it returned, and any additional data from it.
      *
      * @param requestCode The request code originally supplied to startActivityForResult(),
-     *                    allowing you to identify who this result came from.
-     * @param resultCode  The integer result code returned by the child activity through its setResult().
-     * @param intent      An Intent, which can return result data to the caller (various data can be attached to Intent "extras").
+     * allowing you to identify who this result came from.
+     * @param resultCode The integer result code returned by the child activity through its setResult().
+     * @param intent An Intent, which can return result data to the caller (various data can be attached to Intent "extras").
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -372,11 +381,15 @@ public class CordovaActivity extends AppCompatActivity {
      * Report an error to the host application. These errors are unrecoverable (i.e. the main resource is unavailable).
      * The errorCode parameter corresponds to one of the ERROR_* constants.
      *
-     * @param errorCode   The error code corresponding to an ERROR_* value.
+     * @param errorCode The error code corresponding to an ERROR_* value.
      * @param description A String describing the error.
-     * @param failingUrl  The url that failed to load.
+     * @param failingUrl The url that failed to load.
      */
-    public void onReceivedError(final int errorCode, final String description, final String failingUrl) {
+    public void onReceivedError(
+        final int errorCode,
+        final String description,
+        final String failingUrl
+    ) {
         final CordovaActivity me = this;
 
         // If errorUrl specified, then load it
@@ -396,7 +409,12 @@ public class CordovaActivity extends AppCompatActivity {
                 public void run() {
                     if (exit) {
                         me.appView.getView().setVisibility(View.GONE);
-                        me.displayError("Application Error", description + " (" + failingUrl + ")", "OK", exit);
+                        me.displayError(
+                            "Application Error",
+                            description + " (" + failingUrl + ")",
+                            "OK",
+                            exit
+                        );
                     }
                 }
             });
@@ -406,7 +424,12 @@ public class CordovaActivity extends AppCompatActivity {
     /**
      * Display an error dialog and optionally exit application.
      */
-    public void displayError(final String title, final String message, final String button, final boolean exit) {
+    public void displayError(
+        final String title,
+        final String message,
+        final String button,
+        final boolean exit
+    ) {
         final CordovaActivity me = this;
         me.runOnUiThread(new Runnable() {
             public void run() {
@@ -415,15 +438,17 @@ public class CordovaActivity extends AppCompatActivity {
                     dlg.setMessage(message);
                     dlg.setTitle(title);
                     dlg.setCancelable(false);
-                    dlg.setPositiveButton(button,
-                            new AlertDialog.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                    if (exit) {
-                                        finish();
-                                    }
+                    dlg.setPositiveButton(
+                        button,
+                        new AlertDialog.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                if (exit) {
+                                    finish();
                                 }
-                            });
+                            }
+                        }
+                    );
                     dlg.create();
                     dlg.show();
                 } catch (Exception e) {
@@ -463,15 +488,20 @@ public class CordovaActivity extends AppCompatActivity {
     /**
      * Called when a message is sent to plugin.
      *
-     * @param id   The message id
+     * @param id The message id
      * @param data The message data
+     *
      * @return Object or null
      */
     public Object onMessage(String id, Object data) {
         if ("onReceivedError".equals(id)) {
             JSONObject d = (JSONObject) data;
             try {
-                this.onReceivedError(d.getInt("errorCode"), d.getString("description"), d.getString("url"));
+                this.onReceivedError(
+                    d.getInt("errorCode"),
+                    d.getString("description"),
+                    d.getString("url")
+                );
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -511,16 +541,15 @@ public class CordovaActivity extends AppCompatActivity {
      * @param grantResults
      */
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[],
-                                           int[] grantResults) {
+    public void onRequestPermissionsResult(
+        int requestCode, String permissions[],
+        int[] grantResults
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        try
-        {
+        try {
             cordovaInterface.onRequestPermissionResult(requestCode, permissions, grantResults);
-        }
-        catch (JSONException e)
-        {
+        } catch (JSONException e) {
             LOG.d(TAG, "JSONException: Parameters fed into the method are not valid");
             e.printStackTrace();
         }

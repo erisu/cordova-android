@@ -36,13 +36,13 @@ public class PermissionHelper {
      * alternative to cordovaInterface.requestPermission() that does not require the project to be
      * built with cordova-android 5.0.0+
      *
-     * @param plugin        The plugin the permission is being requested for
-     * @param requestCode   A requestCode to be passed to the plugin's onRequestPermissionResult()
-     *                      along with the result of the permission request
-     * @param permission    The permission to be requested
+     * @param plugin The plugin the permission is being requested for
+     * @param requestCode A requestCode to be passed to the plugin's onRequestPermissionResult()
+     * along with the result of the permission request
+     * @param permission The permission to be requested
      */
     public static void requestPermission(CordovaPlugin plugin, int requestCode, String permission) {
-        PermissionHelper.requestPermissions(plugin, requestCode, new String[] {permission});
+        PermissionHelper.requestPermissions(plugin, requestCode, new String[] { permission });
     }
 
     /**
@@ -50,12 +50,16 @@ public class PermissionHelper {
      * alternative to cordovaInterface.requestPermissions() that does not require the project to be
      * built with cordova-android 5.0.0+
      *
-     * @param plugin        The plugin the permissions are being requested for
-     * @param requestCode   A requestCode to be passed to the plugin's onRequestPermissionResult()
-     *                      along with the result of the permissions request
-     * @param permissions   The permissions to be requested
+     * @param plugin The plugin the permissions are being requested for
+     * @param requestCode A requestCode to be passed to the plugin's onRequestPermissionResult()
+     * along with the result of the permissions request
+     * @param permissions The permissions to be requested
      */
-    public static void requestPermissions(CordovaPlugin plugin, int requestCode, String[] permissions) {
+    public static void requestPermissions(
+        CordovaPlugin plugin,
+        int requestCode,
+        String[] permissions
+    ) {
         plugin.cordova.requestPermissions(plugin, requestCode, permissions);
     }
 
@@ -64,18 +68,22 @@ public class PermissionHelper {
      * method alternative to cordovaInterface.hasPermission() that does not require the project to
      * be built with cordova-android 5.0.0+
      *
-     * @param plugin        The plugin the permission is being checked against
-     * @param permission    The permission to be checked
+     * @param plugin The plugin the permission is being checked against
+     * @param permission The permission to be checked
      *
-     * @return              True if the permission has already been granted and false otherwise
+     * @return True if the permission has already been granted and false otherwise
      */
     public static boolean hasPermission(CordovaPlugin plugin, String permission) {
         return plugin.cordova.hasPermission(permission);
     }
 
-    private static void deliverPermissionResult(CordovaPlugin plugin, int requestCode, String[] permissions) {
+    private static void deliverPermissionResult(
+        CordovaPlugin plugin,
+        int requestCode,
+        String[] permissions
+    ) {
         // Generate the request results
-        int[] requestResults = new int[permissions.length];
+        int[] requestResults = new int[ permissions.length ];
         Arrays.fill(requestResults, PackageManager.PERMISSION_GRANTED);
 
         try {

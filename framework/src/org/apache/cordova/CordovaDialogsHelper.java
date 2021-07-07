@@ -41,27 +41,27 @@ public class CordovaDialogsHelper {
         dlg.setTitle("Alert");
         //Don't let alerts break the back button
         dlg.setCancelable(true);
-        dlg.setPositiveButton(android.R.string.ok,
-                new AlertDialog.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        result.gotResult(true, null);
-                    }
-                });
+        dlg.setPositiveButton(
+            android.R.string.ok,
+            new AlertDialog.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    result.gotResult(true, null);
+                }
+            }
+        );
         dlg.setOnCancelListener(
-                new DialogInterface.OnCancelListener() {
-                    public void onCancel(DialogInterface dialog) {
-                        result.gotResult(false, null);
-                    }
-                });
+            new DialogInterface.OnCancelListener() {
+                public void onCancel(DialogInterface dialog) {
+                    result.gotResult(false, null);
+                }
+            });
         dlg.setOnKeyListener(new DialogInterface.OnKeyListener() {
             //DO NOTHING
             public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_BACK)
-                {
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
                     result.gotResult(true, null);
                     return false;
-                }
-                else
+                } else
                     return true;
             }
         });
@@ -73,33 +73,35 @@ public class CordovaDialogsHelper {
         dlg.setMessage(message);
         dlg.setTitle("Confirm");
         dlg.setCancelable(true);
-        dlg.setPositiveButton(android.R.string.ok,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        result.gotResult(true, null);
-                    }
-                });
-        dlg.setNegativeButton(android.R.string.cancel,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        result.gotResult(false, null);
-                    }
-                });
+        dlg.setPositiveButton(
+            android.R.string.ok,
+            new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    result.gotResult(true, null);
+                }
+            }
+        );
+        dlg.setNegativeButton(
+            android.R.string.cancel,
+            new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    result.gotResult(false, null);
+                }
+            }
+        );
         dlg.setOnCancelListener(
-                new DialogInterface.OnCancelListener() {
-                    public void onCancel(DialogInterface dialog) {
-                        result.gotResult(false, null);
-                    }
-                });
+            new DialogInterface.OnCancelListener() {
+                public void onCancel(DialogInterface dialog) {
+                    result.gotResult(false, null);
+                }
+            });
         dlg.setOnKeyListener(new DialogInterface.OnKeyListener() {
             //DO NOTHING
             public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_BACK)
-                {
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
                     result.gotResult(false, null);
                     return false;
-                }
-                else
+                } else
                     return true;
             }
         });
@@ -110,7 +112,7 @@ public class CordovaDialogsHelper {
      * Tell the client to display a prompt dialog to the user.
      * If the client returns true, WebView will assume that the client will
      * handle the prompt dialog and call the appropriate JsPromptResult method.
-     *
+     * <p>
      * Since we are hacking prompts for our own purposes, we should not be using them for
      * this purpose, perhaps we should hack console.log to do this instead!
      */
@@ -124,24 +126,28 @@ public class CordovaDialogsHelper {
         }
         dlg.setView(input);
         dlg.setCancelable(false);
-        dlg.setPositiveButton(android.R.string.ok,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        String userText = input.getText().toString();
-                        result.gotResult(true, userText);
-                    }
-                });
-        dlg.setNegativeButton(android.R.string.cancel,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        result.gotResult(false, null);
-                    }
-                });
+        dlg.setPositiveButton(
+            android.R.string.ok,
+            new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    String userText = input.getText().toString();
+                    result.gotResult(true, userText);
+                }
+            }
+        );
+        dlg.setNegativeButton(
+            android.R.string.cancel,
+            new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    result.gotResult(false, null);
+                }
+            }
+        );
         lastHandledDialog = dlg.show();
     }
 
-    public void destroyLastDialog(){
-        if (lastHandledDialog != null){
+    public void destroyLastDialog() {
+        if (lastHandledDialog != null) {
             lastHandledDialog.cancel();
         }
     }

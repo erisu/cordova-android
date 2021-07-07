@@ -28,7 +28,7 @@ public class CordovaPluginPathHandler {
 
     private final WebViewAssetLoader.PathHandler handler;
 
-    public  CordovaPluginPathHandler(WebViewAssetLoader.PathHandler handler) {
+    public CordovaPluginPathHandler(WebViewAssetLoader.PathHandler handler) {
         this.handler = handler;
     }
 

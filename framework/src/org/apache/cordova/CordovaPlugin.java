@@ -42,7 +42,12 @@ public class CordovaPlugin {
      * Call this after constructing to initialize the plugin.
      * Final because we want to be able to change args without breaking plugins.
      */
-    public final void privateInitialize(String serviceName, CordovaInterface cordova, CordovaWebView webView, CordovaPreferences preferences) {
+    public final void privateInitialize(
+        String serviceName,
+        CordovaInterface cordova,
+        CordovaWebView webView,
+        CordovaPreferences preferences
+    ) {
         assert this.cordova == null;
         this.serviceName = serviceName;
         this.cordova = cordova;
@@ -75,64 +80,79 @@ public class CordovaPlugin {
 
     /**
      * Executes the request.
-     *
+     * <p>
      * This method is called from the WebView thread. To do a non-trivial amount of work, use:
-     *     cordova.getThreadPool().execute(runnable);
-     *
+     * cordova.getThreadPool().execute(runnable);
+     * <p>
      * To run on the UI thread, use:
-     *     cordova.getActivity().runOnUiThread(runnable);
+     * cordova.getActivity().runOnUiThread(runnable);
      *
-     * @param action          The action to execute.
-     * @param rawArgs         The exec() arguments in JSON form.
+     * @param action The action to execute.
+     * @param rawArgs The exec() arguments in JSON form.
      * @param callbackContext The callback context used when calling back into JavaScript.
-     * @return                Whether the action was valid.
+     *
+     * @return Whether the action was valid.
      */
-    public boolean execute(String action, String rawArgs, CallbackContext callbackContext) throws JSONException {
+    public boolean execute(
+        String action,
+        String rawArgs,
+        CallbackContext callbackContext
+    ) throws JSONException {
         JSONArray args = new JSONArray(rawArgs);
         return execute(action, args, callbackContext);
     }
 
     /**
      * Executes the request.
-     *
+     * <p>
      * This method is called from the WebView thread. To do a non-trivial amount of work, use:
-     *     cordova.getThreadPool().execute(runnable);
-     *
+     * cordova.getThreadPool().execute(runnable);
+     * <p>
      * To run on the UI thread, use:
-     *     cordova.getActivity().runOnUiThread(runnable);
+     * cordova.getActivity().runOnUiThread(runnable);
      *
-     * @param action          The action to execute.
-     * @param args            The exec() arguments.
+     * @param action The action to execute.
+     * @param args The exec() arguments.
      * @param callbackContext The callback context used when calling back into JavaScript.
-     * @return                Whether the action was valid.
+     *
+     * @return Whether the action was valid.
      */
-    public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
+    public boolean execute(
+        String action,
+        JSONArray args,
+        CallbackContext callbackContext
+    ) throws JSONException {
         CordovaArgs cordovaArgs = new CordovaArgs(args);
         return execute(action, cordovaArgs, callbackContext);
     }
 
     /**
      * Executes the request.
-     *
+     * <p>
      * This method is called from the WebView thread. To do a non-trivial amount of work, use:
-     *     cordova.getThreadPool().execute(runnable);
-     *
+     * cordova.getThreadPool().execute(runnable);
+     * <p>
      * To run on the UI thread, use:
-     *     cordova.getActivity().runOnUiThread(runnable);
+     * cordova.getActivity().runOnUiThread(runnable);
      *
-     * @param action          The action to execute.
-     * @param args            The exec() arguments, wrapped with some Cordova helpers.
+     * @param action The action to execute.
+     * @param args The exec() arguments, wrapped with some Cordova helpers.
      * @param callbackContext The callback context used when calling back into JavaScript.
-     * @return                Whether the action was valid.
+     *
+     * @return Whether the action was valid.
      */
-    public boolean execute(String action, CordovaArgs args, CallbackContext callbackContext) throws JSONException {
+    public boolean execute(
+        String action,
+        CordovaArgs args,
+        CallbackContext callbackContext
+    ) throws JSONException {
         return false;
     }
 
     /**
      * Called when the system is about to start resuming a previous activity.
      *
-     * @param multitasking		Flag indicating if multitasking is turned on for app
+     * @param multitasking Flag indicating if multitasking is turned on for app
      */
     public void onPause(boolean multitasking) {
     }
@@ -140,7 +160,7 @@ public class CordovaPlugin {
     /**
      * Called when the activity will start interacting with the user.
      *
-     * @param multitasking		Flag indicating if multitasking is turned on for app
+     * @param multitasking Flag indicating if multitasking is turned on for app
      */
     public void onResume(boolean multitasking) {
     }
@@ -176,7 +196,7 @@ public class CordovaPlugin {
      * to preserve some information so as to handle that result; onRestoreStateForActivityResult()
      * will only be called if the plugin is the recipient of an Activity result
      *
-     * @return  Bundle containing the state of the plugin or null if state does not need to be saved
+     * @return Bundle containing the state of the plugin or null if state does not need to be saved
      */
     public Bundle onSaveInstanceState() {
         return null;
@@ -187,17 +207,18 @@ public class CordovaPlugin {
      * been destroyed. The Bundle will be the same as the one the plugin returned in
      * onSaveInstanceState()
      *
-     * @param state             Bundle containing the state of the plugin
-     * @param callbackContext   Replacement Context to return the plugin result to
+     * @param state Bundle containing the state of the plugin
+     * @param callbackContext Replacement Context to return the plugin result to
      */
     public void onRestoreStateForActivityResult(Bundle state, CallbackContext callbackContext) {}
 
     /**
      * Called when a message is sent to plugin.
      *
-     * @param id            The message id
-     * @param data          The message data
-     * @return              Object to stop propagation or null
+     * @param id The message id
+     * @param data The message data
+     *
+     * @return Object to stop propagation or null
      */
     public Object onMessage(String id, Object data) {
         return null;
@@ -207,25 +228,25 @@ public class CordovaPlugin {
      * Called when an activity you launched exits, giving you the requestCode you started it with,
      * the resultCode it returned, and any additional data from it.
      *
-     * @param requestCode   The request code originally supplied to startActivityForResult(),
-     *                      allowing you to identify who this result came from.
-     * @param resultCode    The integer result code returned by the child activity through its setResult().
-     * @param intent        An Intent, which can return result data to the caller (various data can be
-     *                      attached to Intent "extras").
+     * @param requestCode The request code originally supplied to startActivityForResult(),
+     * allowing you to identify who this result came from.
+     * @param resultCode The integer result code returned by the child activity through its setResult().
+     * @param intent An Intent, which can return result data to the caller (various data can be
+     * attached to Intent "extras").
      */
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
     }
 
     /**
      * Hook for blocking the loading of external resources.
-     *
+     * <p>
      * This will be called when the WebView's shouldInterceptRequest wants to
      * know whether to open a connection to an external resource. Return false
      * to block the request: if any plugin returns false, Cordova will block
      * the request. If all plugins return null, the default policy will be
      * enforced. If at least one plugin returns true, and no plugins return
      * false, then the request will proceed.
-     *
+     * <p>
      * Note that this only affects resource requests which are routed through
      * WebViewClient.shouldInterceptRequest, such as XMLHttpRequest requests and
      * img tag loads. WebSockets and media requests (such as <video> and <audio>
@@ -239,7 +260,7 @@ public class CordovaPlugin {
     /**
      * Hook for blocking navigation by the Cordova WebView. This applies both to top-level and
      * iframe navigations.
-     *
+     * <p>
      * This will be called when the WebView's needs to know whether to navigate
      * to a new page. Return false to block the navigation: if any plugin
      * returns false, Cordova will block the navigation. If all plugins return
@@ -261,7 +282,7 @@ public class CordovaPlugin {
 
     /**
      * Hook for blocking the launching of Intents by the Cordova application.
-     *
+     * <p>
      * This will be called when the WebView will not navigate to a page, but
      * could launch an intent to handle the URL. Return false to block this: if
      * any plugin returns false, Cordova will block the navigation. If all
@@ -276,8 +297,9 @@ public class CordovaPlugin {
     /**
      * Allows plugins to handle a link being clicked. Return true here to cancel the navigation.
      *
-     * @param url           The URL that is trying to be loaded in the Cordova webview.
-     * @return              Return true to prevent the URL from loading. Default is false.
+     * @param url The URL that is trying to be loaded in the Cordova webview.
+     *
+     * @return Return true to prevent the URL from loading. Default is false.
      */
     public boolean onOverrideUrlLoading(String url) {
         return false;
@@ -286,18 +308,18 @@ public class CordovaPlugin {
     /**
      * Hook for redirecting requests. Applies to WebView requests as well as requests made by plugins.
      * To handle the request directly, return a URI in the form:
-     *
-     *    cdvplugin://pluginId/...
-     *
+     * <p>
+     * cdvplugin://pluginId/...
+     * <p>
      * And implement handleOpenForRead().
      * To make this easier, use the toPluginUri() and fromPluginUri() helpers:
-     *
-     *     public Uri remapUri(Uri uri) { return toPluginUri(uri); }
-     *
-     *     public CordovaResourceApi.OpenForReadResult handleOpenForRead(Uri uri) throws IOException {
-     *         Uri origUri = fromPluginUri(uri);
-     *         ...
-     *     }
+     * <p>
+     * public Uri remapUri(Uri uri) { return toPluginUri(uri); }
+     * <p>
+     * public CordovaResourceApi.OpenForReadResult handleOpenForRead(Uri uri) throws IOException {
+     * Uri origUri = fromPluginUri(uri);
+     * ...
+     * }
      */
     public Uri remapUri(Uri uri) {
         return null;
@@ -334,9 +356,9 @@ public class CordovaPlugin {
 
     /**
      * Called when the WebView does a top-level navigation or refreshes.
-     *
+     * <p>
      * Plugins should stop any long-running processes and clean up internal state.
-     *
+     * <p>
      * Does nothing by default.
      */
     public void onReset() {
@@ -346,15 +368,19 @@ public class CordovaPlugin {
      * Called when the system received an HTTP authentication request. Plugin can use
      * the supplied HttpAuthHandler to process this auth challenge.
      *
-     * @param view              The WebView that is initiating the callback
-     * @param handler           The HttpAuthHandler used to set the WebView's response
-     * @param host              The host requiring authentication
-     * @param realm             The realm for which authentication is required
+     * @param view The WebView that is initiating the callback
+     * @param handler The HttpAuthHandler used to set the WebView's response
+     * @param host The host requiring authentication
+     * @param realm The realm for which authentication is required
      *
-     * @return                  Returns True if plugin will resolve this auth challenge, otherwise False
-     *
+     * @return Returns True if plugin will resolve this auth challenge, otherwise False
      */
-    public boolean onReceivedHttpAuthRequest(CordovaWebView view, ICordovaHttpAuthHandler handler, String host, String realm) {
+    public boolean onReceivedHttpAuthRequest(
+        CordovaWebView view,
+        ICordovaHttpAuthHandler handler,
+        String host,
+        String realm
+    ) {
         return false;
     }
 
@@ -362,20 +388,22 @@ public class CordovaPlugin {
      * Called when he system received an SSL client certificate request.  Plugin can use
      * the supplied ClientCertRequest to process this certificate challenge.
      *
-     * @param view              The WebView that is initiating the callback
-     * @param request           The client certificate request
+     * @param view The WebView that is initiating the callback
+     * @param request The client certificate request
      *
-     * @return                  Returns True if plugin will resolve this auth challenge, otherwise False
-     *
+     * @return Returns True if plugin will resolve this auth challenge, otherwise False
      */
-    public boolean onReceivedClientCertRequest(CordovaWebView view, ICordovaClientCertRequest request) {
+    public boolean onReceivedClientCertRequest(
+        CordovaWebView view,
+        ICordovaClientCertRequest request
+    ) {
         return false;
     }
 
     /**
      * Called by the system when the device configuration changes while your activity is running.
      *
-     * @param newConfig		The new device configuration
+     * @param newConfig The new device configuration
      */
     public void onConfigurationChanged(Configuration newConfig) {
     }
@@ -383,9 +411,9 @@ public class CordovaPlugin {
     /**
      * Called by the Plugin Manager when we need to actually request permissions
      *
-     * @param requestCode   Passed to the activity to track the request
+     * @param requestCode Passed to the activity to track the request
      *
-     * @return              Returns the permission that was stored in the plugin
+     * @return Returns the permission that was stored in the plugin
      */
 
     public void requestPermissions(int requestCode) {
@@ -408,12 +436,14 @@ public class CordovaPlugin {
      * @param requestCode
      * @param permissions
      * @param grantResults
-     * 
+     *
      * @deprecated Use {@link #onRequestPermissionsResult} instead.
      */
     @Deprecated
-    public void onRequestPermissionResult(int requestCode, String[] permissions,
-                                          int[] grantResults) throws JSONException {
+    public void onRequestPermissionResult(
+        int requestCode, String[] permissions,
+        int[] grantResults
+    ) throws JSONException {
 
     }
 
@@ -424,13 +454,16 @@ public class CordovaPlugin {
      * @param permissions
      * @param grantResults
      */
-    public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                          int[] grantResults) throws JSONException {
+    public void onRequestPermissionsResult(
+        int requestCode, String[] permissions,
+        int[] grantResults
+    ) throws JSONException {
 
     }
 
     /**
      * Allow plugins to supply a PathHandler for the WebViewAssetHandler
+     *
      * @return a CordovaPluginPathHandler which listen for paths and returns a response
      */
     public CordovaPluginPathHandler getPathHandler() {

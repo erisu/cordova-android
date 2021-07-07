@@ -67,13 +67,13 @@ public class SystemWebView extends WebView implements CordovaWebViewEngine.Engin
 
     @Override
     public void setWebViewClient(WebViewClient client) {
-        viewClient = (SystemWebViewClient)client;
+        viewClient = (SystemWebViewClient) client;
         super.setWebViewClient(client);
     }
 
     @Override
     public void setWebChromeClient(WebChromeClient client) {
-        chromeClient = (SystemWebChromeClient)client;
+        chromeClient = (SystemWebChromeClient) client;
         super.setWebChromeClient(client);
     }
 

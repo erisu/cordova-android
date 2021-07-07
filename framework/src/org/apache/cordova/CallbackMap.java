@@ -38,10 +38,11 @@ public class CallbackMap {
      * Stores a CordovaPlugin and request code and returns a new unique request code to use
      * in a permission request.
      *
-     * @param receiver      The plugin that is making the request
-     * @param requestCode   The original request code used by the plugin
-     * @return              A unique request code that can be used to retrieve this callback
-     *                      with getAndRemoveCallback()
+     * @param receiver The plugin that is making the request
+     * @param requestCode The original request code used by the plugin
+     *
+     * @return A unique request code that can be used to retrieve this callback
+     * with getAndRemoveCallback()
      */
     public synchronized int registerCallback(CordovaPlugin receiver, int requestCode) {
         int mappedId = this.currentCallbackId++;
@@ -53,9 +54,10 @@ public class CallbackMap {
      * Retrieves and removes a callback stored in the map using the mapped request code
      * obtained from registerCallback()
      *
-     * @param mappedId      The request code obtained from registerCallback()
-     * @return              The CordovaPlugin and orignal request code that correspond to the
-     *                      given mappedCode
+     * @param mappedId The request code obtained from registerCallback()
+     *
+     * @return The CordovaPlugin and orignal request code that correspond to the
+     * given mappedCode
      */
     public synchronized Pair<CordovaPlugin, Integer> getAndRemoveCallback(int mappedId) {
         Pair<CordovaPlugin, Integer> callback = callbacks.get(mappedId);

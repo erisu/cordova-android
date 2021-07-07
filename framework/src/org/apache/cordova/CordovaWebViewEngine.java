@@ -28,38 +28,54 @@ import android.webkit.ValueCallback;
  * Instead, we will create a new interface: e.g. CordovaWebViewEngineV2
  */
 public interface CordovaWebViewEngine {
-    void init(CordovaWebView parentWebView, CordovaInterface cordova, Client client,
-              CordovaResourceApi resourceApi, PluginManager pluginManager,
-              NativeToJsMessageQueue nativeToJsMessageQueue);
+    void init(
+        CordovaWebView parentWebView, CordovaInterface cordova, Client client,
+        CordovaResourceApi resourceApi, PluginManager pluginManager,
+        NativeToJsMessageQueue nativeToJsMessageQueue
+    );
 
     CordovaWebView getCordovaWebView();
+
     ICordovaCookieManager getCookieManager();
+
     View getView();
 
     void loadUrl(String url, boolean clearNavigationStack);
 
     void stopLoading();
 
-    /** Return the currently loaded URL */
+    /**
+     * Return the currently loaded URL
+     */
     String getUrl();
 
     void clearCache();
 
-    /** After calling clearHistory(), canGoBack() should be false. */
+    /**
+     * After calling clearHistory(), canGoBack() should be false.
+     */
     void clearHistory();
 
     boolean canGoBack();
 
-    /** Returns whether a navigation occurred */
+    /**
+     * Returns whether a navigation occurred
+     */
     boolean goBack();
 
-    /** Pauses / resumes the WebView's event loop. */
+    /**
+     * Pauses / resumes the WebView's event loop.
+     */
     void setPaused(boolean value);
 
-    /** Clean up all resources associated with the WebView. */
+    /**
+     * Clean up all resources associated with the WebView.
+     */
     void destroy();
 
-    /** Add the evaulate Javascript method **/
+    /**
+     * Add the evaulate Javascript method
+     **/
     void evaluateJavascript(String js, ValueCallback<String> callback);
 
     /**
@@ -76,10 +92,15 @@ public interface CordovaWebViewEngine {
      */
     public interface Client {
         Boolean onDispatchKeyEvent(KeyEvent event);
+
         void clearLoadTimeoutTimer();
+
         void onPageStarted(String newUrl);
+
         void onReceivedError(int errorCode, String description, String failingUrl);
+
         void onPageFinishedLoading(String url);
+
         boolean onNavigationAttempt(String url);
     }
 }

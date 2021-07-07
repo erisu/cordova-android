@@ -39,7 +39,13 @@ public class CordovaBridge {
         this.jsMessageQueue = jsMessageQueue;
     }
 
-    public String jsExec(int bridgeSecret, String service, String action, String callbackId, String arguments) throws JSONException, IllegalAccessException {
+    public String jsExec(
+        int bridgeSecret,
+        String service,
+        String action,
+        String callbackId,
+        String arguments
+    ) throws JSONException, IllegalAccessException {
         if (!verifySecret("exec()", bridgeSecret)) {
             return null;
         }
@@ -68,14 +74,20 @@ public class CordovaBridge {
         }
     }
 
-    public void jsSetNativeToJsBridgeMode(int bridgeSecret, int value) throws IllegalAccessException {
+    public void jsSetNativeToJsBridgeMode(
+        int bridgeSecret,
+        int value
+    ) throws IllegalAccessException {
         if (!verifySecret("setNativeToJsBridgeMode()", bridgeSecret)) {
             return;
         }
         jsMessageQueue.setBridgeMode(value);
     }
 
-    public String jsRetrieveJsMessages(int bridgeSecret, boolean fromOnlineEvent) throws IllegalAccessException {
+    public String jsRetrieveJsMessages(
+        int bridgeSecret,
+        boolean fromOnlineEvent
+    ) throws IllegalAccessException {
         if (!verifySecret("retrieveJsMessages()", bridgeSecret)) {
             return null;
         }
@@ -93,14 +105,19 @@ public class CordovaBridge {
         }
         // Bridge secret wrong and bridge not due to it being from the previous page.
         if (expectedBridgeSecret < 0 || bridgeSecret != expectedBridgeSecret) {
-            LOG.e(LOG_TAG, "Bridge access attempt with wrong secret token, possibly from malicious code. Disabling exec() bridge!");
+            LOG.e(
+                LOG_TAG,
+                "Bridge access attempt with wrong secret token, possibly from malicious code. Disabling exec() bridge!"
+            );
             clearBridgeSecret();
             throw new IllegalAccessException();
         }
         return true;
     }
 
-    /** Called on page transitions */
+    /**
+     * Called on page transitions
+     */
     void clearBridgeSecret() {
         expectedBridgeSecret = -1;
     }
@@ -109,7 +126,9 @@ public class CordovaBridge {
         return expectedBridgeSecret != -1;
     }
 
-    /** Called by cordova.js to initialize the bridge. */
+    /**
+     * Called by cordova.js to initialize the bridge.
+     */
     //On old Androids SecureRandom isn't really secure, this is the least of your problems if
     //you're running Android 4.3 and below in 2017
     int generateBridgeSecret() {
@@ -146,7 +165,7 @@ public class CordovaBridge {
             try {
                 int bridgeSecret = Integer.parseInt(defaultValue.substring(16));
                 jsSetNativeToJsBridgeMode(bridgeSecret, Integer.parseInt(message));
-            } catch (NumberFormatException e){
+            } catch (NumberFormatException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
@@ -163,8 +182,7 @@ public class CordovaBridge {
                 e.printStackTrace();
             }
             return "";
-        }
-        else if (defaultValue != null && defaultValue.startsWith("gap_init:")) {
+        } else if (defaultValue != null && defaultValue.startsWith("gap_init:")) {
             // Protect against random iframes being able to talk through the bridge.
             // Trust only pages which the app would have been allowed to navigate to anyway.
             if (pluginManager.shouldAllowBridgeAccess(origin)) {
@@ -173,7 +191,7 @@ public class CordovaBridge {
                 jsMessageQueue.setBridgeMode(bridgeMode);
                 // Tell JS the bridge secret.
                 int secret = generateBridgeSecret();
-                return ""+secret;
+                return "" + secret;
             } else {
                 LOG.e(LOG_TAG, "gap_init called from restricted origin: " + origin);
             }
