@@ -22,6 +22,7 @@ var path = require('path');
 var fs = require('fs-extra');
 const { forgivingWhichSync, isWindows, isDarwin } = require('./utils');
 const java = require('./env/java');
+const PLATFORM_ROOT_DIR = path.join(`${__dirname}/../../../..`);
 const PROJECT_ROOT_DIR = path.join(`${__dirname}/../../../../../..`);
 const { CordovaError, ConfigParser, events } = require('cordova-common');
 var android_sdk = require('./android_sdk');
@@ -49,8 +50,9 @@ module.exports.get_target = function () {
 
 /** @returns {number} target sdk or 0 if undefined */
 function getUserTargetSdkVersion () {
-    // Get project's root config.xml & find the desired targetSdkVersion.
-    const configFile = path.join(PROJECT_ROOT_DIR, 'config.xml');
+    const configDir = __dirname.includes('cordova-android') ? PROJECT_ROOT_DIR : PLATFORM_ROOT_DIR;
+    const configFile = path.join(configDir, 'config.xml');
+
     if (!fs.existsSync(configFile)) return 0;
 
     const configParser = new ConfigParser(configFile);
