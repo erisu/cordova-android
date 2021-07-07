@@ -18,14 +18,8 @@
 */
 package org.apache.cordova;
 
-import java.util.ArrayList;
-import java.util.Locale;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.app.AlertDialog;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -42,6 +36,12 @@ import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * This class is the main Android activity that represents the Cordova

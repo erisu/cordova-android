@@ -34,6 +34,8 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import androidx.webkit.WebViewAssetLoader;
+
 import org.apache.cordova.AuthenticationToken;
 import org.apache.cordova.CordovaClientCertRequest;
 import org.apache.cordova.CordovaHttpAuthHandler;
@@ -46,8 +48,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Hashtable;
-
-import androidx.webkit.WebViewAssetLoader;
 
 /**
  * This class is the WebViewClient that implements callbacks for our web view.

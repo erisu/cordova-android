@@ -19,13 +19,9 @@
 
 package org.apache.cordova;
 
-import org.apache.cordova.CordovaPlugin;
-import org.apache.cordova.ConfigXmlParser;
-import org.apache.cordova.LOG;
-import org.apache.cordova.AllowList;
-import org.xmlpull.v1.XmlPullParser;
-
 import android.content.Context;
+
+import org.xmlpull.v1.XmlPullParser;
 
 public class AllowListPlugin extends CordovaPlugin {
     public static final String PLUGIN_NAME = "CordovaAllowListPlugin";
