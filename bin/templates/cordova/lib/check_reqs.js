@@ -22,7 +22,7 @@ var path = require('path');
 var fs = require('fs-extra');
 const { forgivingWhichSync, isWindows, isDarwin } = require('./utils');
 const java = require('./env/java');
-var REPO_ROOT = path.join(__dirname, '..', '..', '..', '..');
+const PROJECT_ROOT_DIR = path.join(`${__dirname}/../../../../../..`);
 const { CordovaError, ConfigParser, events } = require('cordova-common');
 var android_sdk = require('./android_sdk');
 const semver = require('semver');
@@ -44,13 +44,13 @@ module.exports.get_target = function () {
         events.emit('warn', `android-targetSdkVersion should be greater than or equal to ${SDK_VERSION}.`);
     }
 
-    return `android-${Math.max(userTargetSdkVersion, SDK_VERSION)}`;
+    return `android-${userTargetSdkVersion || SDK_VERSION}`;
 };
 
 /** @returns {number} target sdk or 0 if undefined */
 function getUserTargetSdkVersion () {
-    // If the repo config.xml file exists, find the desired targetSdkVersion.
-    const configFile = path.join(REPO_ROOT, 'config.xml');
+    // Get project's root config.xml & find the desired targetSdkVersion.
+    const configFile = path.join(PROJECT_ROOT_DIR, 'config.xml');
     if (!fs.existsSync(configFile)) return 0;
 
     const configParser = new ConfigParser(configFile);
