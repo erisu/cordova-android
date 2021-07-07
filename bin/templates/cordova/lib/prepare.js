@@ -43,6 +43,17 @@ function parseArguments (argv) {
     }, {}, argv || [], 0);
 }
 
+function updateProjectPropertiesTarget (prepare) {
+    const platformDir = prepare.locations.root;
+    const projectFile = path.join(platformDir, 'project.properties');
+    const targetApi = checkReqs.get_target();
+
+    let data = fs.readFileSync(projectFile, 'utf8');
+    data = data.replace(/^target=.*/m, `target=${targetApi}`);
+
+    fs.writeFileSync(projectFile, data);
+}
+
 module.exports.prepare = function (cordovaProject, options) {
     var self = this;
 
@@ -61,6 +72,8 @@ module.exports.prepare = function (cordovaProject, options) {
 
     // Update Project's Gradle Properties
     updateUserProjectGradlePropertiesConfig(this, args);
+    // Update Projects Platform Android Target
+    updateProjectPropertiesTarget(this);
 
     // Update own www dir with project's www assets and plugins' assets and js-files
     return Promise.resolve(updateWww(cordovaProject, this.locations)).then(function () {
