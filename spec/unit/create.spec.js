@@ -72,7 +72,6 @@ describe('create', function () {
             Manifest_mock.prototype.setName.and.returnValue(new Manifest_mock());
             spyOn(create, 'validateProjectName').and.resolveTo();
             spyOn(create, 'copyJsAndLibrary');
-            spyOn(create, 'copyBuildRules');
             spyOn(create, 'writeProjectProperties');
             spyOn(create, 'prepBuildFiles');
             spyOn(create, 'writeNameForAndroidStudio');
@@ -202,12 +201,6 @@ describe('create', function () {
                 config_mock.name.and.returnValue('IncredibleApp');
                 return create.create(project_path, config_mock, {}, events_mock).then(() => {
                     expect(utils.replaceFileContents).toHaveBeenCalledWith(path.join(app_path, 'res', 'values', 'strings.xml'), /__NAME__/, 'IncredibleApp');
-                });
-            });
-
-            it('should copy build rules / gradle files into generated project', () => {
-                return create.create(project_path, config_mock, {}, events_mock).then(() => {
-                    expect(create.copyBuildRules).toHaveBeenCalledWith(project_path);
                 });
             });
 
