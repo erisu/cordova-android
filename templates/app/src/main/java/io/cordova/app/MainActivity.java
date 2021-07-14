@@ -17,12 +17,12 @@
        under the License.
  */
 
-package __ID__;
+package io.cordova.app;
 
 import android.os.Bundle;
 import org.apache.cordova.*;
 
-public class __ACTIVITY__ extends CordovaActivity
+public class MainActivity extends CordovaActivity
 {
     @Override
     public void onCreate(Bundle savedInstanceState)

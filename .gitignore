@@ -10,7 +10,7 @@ Desktop.ini
 *.jar
 default.properties
 gen
-assets/www/cordova.js
+templates/app/src/main/assets/www/cordova.js
 local.properties
 proguard.cfg
 proguard-project.txt
@@ -26,7 +26,7 @@ example
 /framework/javadoc-public
 /framework/javadoc-private
 
-**/assets/www/cordova.js
+**/templates/app/src/main/assets/www/cordova.js
 
 /test/.externalNativeBuild
 
