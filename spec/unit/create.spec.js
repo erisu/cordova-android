@@ -25,61 +25,6 @@ var fs = require('fs-extra');
 var path = require('path');
 
 describe('create', function () {
-    describe('validatePackageName helper method', function () {
-        describe('happy path (valid package names)', function () {
-            var valid = [
-                'org.apache.mobilespec',
-                'com.example',
-                'com.floors42.package',
-                'ball8.ball8.ball8ball'
-            ];
-            valid.forEach(function (package_name) {
-                it('Test#001 : should accept ' + package_name, () => {
-                    return create.validatePackageName(package_name);
-                });
-            });
-        });
-
-        describe('failure cases (invalid package names)', function () {
-            function expectPackageNameToBeRejected (name) {
-                return create.validatePackageName(name).then(() => {
-                    fail('Expected promise to be rejected');
-                }, err => {
-                    expect(err).toEqual(jasmine.any(Error));
-                    expect(err.message).toContain('Error validating package name');
-                });
-            }
-
-            it('should reject empty package names', () => {
-                return expectPackageNameToBeRejected('');
-            });
-
-            it('should reject package names containing "class"', () => {
-                return expectPackageNameToBeRejected('com.class.is.bad');
-            });
-
-            it('should reject package names that do not start with a latin letter', () => {
-                return expectPackageNameToBeRejected('_un.der.score');
-            });
-
-            it('should reject package names with terms that do not start with a latin letter', () => {
-                return expectPackageNameToBeRejected('un._der.score');
-            });
-
-            it('should reject package names containing non-alphanumeric or underscore characters', () => {
-                return expectPackageNameToBeRejected('th!$.!$.b@d');
-            });
-
-            it('should reject package names that do not contain enough dots', () => {
-                return expectPackageNameToBeRejected('therearenodotshere');
-            });
-
-            it('should reject package names that end with a dot', () => {
-                return expectPackageNameToBeRejected('this.is.a.complete.sentence.');
-            });
-        });
-    });
-
     describe('validateProjectName helper method', function () {
         describe('happy path (valid project names)', function () {
             var valid = [
@@ -125,7 +70,6 @@ describe('create', function () {
             Manifest_mock.prototype.setPackageId.and.returnValue(new Manifest_mock());
             Manifest_mock.prototype.getActivity.and.returnValue(new Manifest_mock());
             Manifest_mock.prototype.setName.and.returnValue(new Manifest_mock());
-            spyOn(create, 'validatePackageName').and.resolveTo();
             spyOn(create, 'validateProjectName').and.resolveTo();
             spyOn(create, 'copyJsAndLibrary');
             spyOn(create, 'copyScripts');
@@ -148,20 +92,6 @@ describe('create', function () {
         });
 
         describe('parameter values and defaults', function () {
-            it('should have a default package name of my.cordova.project', () => {
-                config_mock.packageName.and.returnValue(undefined);
-                return create.create(project_path, config_mock, {}, events_mock).then(() => {
-                    expect(create.validatePackageName).toHaveBeenCalledWith('my.cordova.project');
-                });
-            });
-
-            it('should use the ConfigParser-provided package name, if exists', () => {
-                config_mock.packageName.and.returnValue('org.apache.cordova');
-                return create.create(project_path, config_mock, {}, events_mock).then(() => {
-                    expect(create.validatePackageName).toHaveBeenCalledWith('org.apache.cordova');
-                });
-            });
-
             it('should have a default project name of CordovaExample', () => {
                 config_mock.name.and.returnValue(undefined);
                 return create.create(project_path, config_mock, {}, events_mock).then(() => {
