@@ -74,6 +74,8 @@ public class CordovaWebViewImpl implements CordovaWebView {
 
     private Set<Integer> boundKeyCodes = new HashSet<Integer>();
 
+    private boolean pageLoading = true;
+
     public static CordovaWebViewEngine createEngine(Context context, CordovaPreferences preferences) {
         String className = preferences.getString("webview", SystemWebViewEngine.class.getCanonicalName());
         try {
@@ -126,6 +128,8 @@ public class CordovaWebViewImpl implements CordovaWebView {
 
     @Override
     public void loadUrlIntoView(final String url, boolean recreatePlugins) {
+        pageLoading = true;
+
         LOG.d(TAG, ">>> loadUrl(" + url + ")");
         if (url.equals("about:blank") || url.startsWith("javascript:")) {
             engine.loadUrl(url, false);
@@ -539,6 +543,11 @@ public class CordovaWebViewImpl implements CordovaWebView {
         hideCustomView();
     }
 
+    @Override
+    public boolean isPageLoading() {
+        return pageLoading;
+    }
+
     protected class EngineClient implements CordovaWebViewEngine.Client {
         @Override
         public void clearLoadTimeoutTimer() {
@@ -588,6 +597,8 @@ public class CordovaWebViewImpl implements CordovaWebView {
                                         pluginManager.postMessage("spinner", "stop");
                                     }
                                 });
+
+                                pageLoading = false;
                             } else {
                                 LOG.d(TAG, "Cordova activity does not exist.");
                             }

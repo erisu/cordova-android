@@ -20,11 +20,15 @@
 package __ID__;
 
 import android.os.Bundle;
+import android.os.Handler;
 import org.apache.cordova.*;
 import androidx.core.splashscreen.SplashScreen;
 
 public class __ACTIVITY__ extends CordovaActivity
 {
+    private boolean splashScreenKeepOnScreen = true;
+    private final int DELAY = 600; // 0.6 seconds
+
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -41,5 +45,22 @@ public class __ACTIVITY__ extends CordovaActivity
 
         // Set by <content src="index.html" /> in config.xml
         loadUrl(launchUrl);
+
+        splashScreen.setKeepOnScreenCondition(() -> splashScreenKeepOnScreen);
+
+        // Splash Screen Auto Hide Handler
+        Handler splashScreenHandler = new Handler();
+        splashScreenHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                // Check if is page loading is completed.
+                splashScreenKeepOnScreen = appView.getEngine().getCordovaWebView().isPageLoading();
+
+                // If the page is still loading, keep checking back in a second.
+                if (splashScreenKeepOnScreen) {
+                    splashScreenHandler.postDelayed(this, DELAY);
+                }
+            }
+        });
     }
 }

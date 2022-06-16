@@ -67,6 +67,8 @@ public interface CordovaWebView {
 
     void handleDestroy();
 
+    boolean isPageLoading();
+
     /**
      * Send JavaScript statement back to JavaScript.
      *
