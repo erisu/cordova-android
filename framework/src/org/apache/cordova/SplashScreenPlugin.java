@@ -67,11 +67,6 @@ public class SplashScreenPlugin extends CordovaPlugin {
      */
     private boolean keepOnScreen = true;
 
-    /**
-     * @param boolean delayHandlerCondition flag determins if the handler should continut to run
-     */
-    private boolean delayHandlerCondition = true;
-
     @Override
     protected void pluginInitialize() {
         // Auto Hide & Delay Settings
@@ -98,7 +93,6 @@ public class SplashScreenPlugin extends CordovaPlugin {
         CallbackContext callbackContext
     ) throws JSONException {
         if (action.equals("hide")) {
-            delayHandlerCondition = false;
             keepOnScreen = false;
         } else {
             return false;
