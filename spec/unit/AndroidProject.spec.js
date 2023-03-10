@@ -87,26 +87,26 @@ describe('AndroidProject', () => {
     });
 
     describe('getPackageName', () => {
-        let AndroidManifestSpy;
-        let AndroidManifestFns;
+        let CordovaGradleConfigParserSpy;
+        let CordovaGradleConfigParserFns;
         let androidProject;
 
         beforeEach(() => {
-            AndroidManifestFns = jasmine.createSpyObj('AndroidManifestFns', ['getPackageId']);
-            AndroidManifestSpy = jasmine.createSpy('AndroidManifest').and.returnValue(AndroidManifestFns);
-            AndroidProject.__set__('AndroidManifest', AndroidManifestSpy);
+            CordovaGradleConfigParserFns = jasmine.createSpyObj('CordovaGradleConfigParserFns', ['getPackageId']);
+            CordovaGradleConfigParserSpy = jasmine.createSpy('CordovaGradleConfigParser').and.returnValue(CordovaGradleConfigParserFns);
+            AndroidProject.__set__('CordovaGradleConfigParser', CordovaGradleConfigParserSpy);
 
             androidProject = new AndroidProject(PROJECT_DIR);
         });
 
         it('should get the package name AndroidManifest', () => {
             androidProject.getPackageName();
-            expect(AndroidManifestSpy).toHaveBeenCalledWith(path.join(PROJECT_DIR, 'app/src/main/AndroidManifest.xml'));
+            expect(CordovaGradleConfigParserSpy).toHaveBeenCalledWith(path.join(PROJECT_DIR, 'app/src/main/AndroidManifest.xml'));
         });
 
         it('should return the package name', () => {
             const packageName = 'io.cordova.unittest';
-            AndroidManifestFns.getPackageId.and.returnValue(packageName);
+            CordovaGradleConfigParserFns.getPackageName.and.returnValue(packageName);
 
             expect(androidProject.getPackageName()).toBe(packageName);
         });

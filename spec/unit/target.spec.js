@@ -233,7 +233,7 @@ describe('target', () => {
         beforeEach(() => {
             installTarget = { id: 'emulator-5556', type: 'emulator', arch: 'atari' };
 
-            manifest = jasmine.createSpyObj('manifestStub', ['getPackageId', 'getActivity']);
+            manifest = jasmine.createSpyObj('manifestStub', ['getActivity']);
             manifest.getActivity.and.returnValue(jasmine.createSpyObj('Activity', ['getName']));
             appSpec = { manifest, buildResults: {} };
 
