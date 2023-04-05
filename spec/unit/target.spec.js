@@ -228,14 +228,18 @@ describe('target', () => {
     describe('install', () => {
         let AdbSpy;
         let buildSpy;
-        let installTarget, manifest, appSpec;
+        let installTarget, manifest, cordovaGradleConfigParser, appSpec;
 
         beforeEach(() => {
             installTarget = { id: 'emulator-5556', type: 'emulator', arch: 'atari' };
 
             manifest = jasmine.createSpyObj('manifestStub', ['getActivity']);
             manifest.getActivity.and.returnValue(jasmine.createSpyObj('Activity', ['getName']));
-            appSpec = { manifest, buildResults: {} };
+
+            cordovaGradleConfigParser = jasmine.createSpyObj('cordovaGradleConfigParserStub', ['getPackageName']);
+            cordovaGradleConfigParser.getPackageName.and.returnValue('unittestapp');
+
+            appSpec = { manifest, buildResults: {}, cordovaGradleConfigParser };
 
             buildSpy = jasmine.createSpyObj('build', ['findBestApkForArchitecture']);
             target.__set__('build', buildSpy);
@@ -308,7 +312,7 @@ describe('target', () => {
         it('should start the newly installed app on the device', () => {
             const packageId = 'unittestapp';
             const activityName = 'TestActivity';
-            manifest.getPackageId.and.returnValue(packageId);
+            cordovaGradleConfigParser.getPackageName.and.returnValue(packageId);
             manifest.getActivity().getName.and.returnValue(activityName);
 
             return target.install(installTarget, appSpec).then(() => {

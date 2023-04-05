@@ -92,16 +92,16 @@ describe('AndroidProject', () => {
         let androidProject;
 
         beforeEach(() => {
-            CordovaGradleConfigParserFns = jasmine.createSpyObj('CordovaGradleConfigParserFns', ['getPackageId']);
+            CordovaGradleConfigParserFns = jasmine.createSpyObj('CordovaGradleConfigParserFns', ['getPackageName']);
             CordovaGradleConfigParserSpy = jasmine.createSpy('CordovaGradleConfigParser').and.returnValue(CordovaGradleConfigParserFns);
             AndroidProject.__set__('CordovaGradleConfigParser', CordovaGradleConfigParserSpy);
 
             androidProject = new AndroidProject(PROJECT_DIR);
         });
 
-        it('should get the package name AndroidManifest', () => {
+        it('should get the package name Cordova Gradle Config file', () => {
             androidProject.getPackageName();
-            expect(CordovaGradleConfigParserSpy).toHaveBeenCalledWith(path.join(PROJECT_DIR, 'app/src/main/AndroidManifest.xml'));
+            expect(CordovaGradleConfigParserSpy).toHaveBeenCalledWith(PROJECT_DIR);
         });
 
         it('should return the package name', () => {
