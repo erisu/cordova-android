@@ -19,9 +19,17 @@
 
 const rewire = require('rewire');
 const { CordovaError } = require('cordova-common');
+const MockCordovaGradleConfigParser = require('./mocks/config/MockCordovaGradleConfigParser');
+const CordovaGradleConfigParserFactory = require('../../lib/config/CordovaGradleConfigParserFactory');
 
 describe('target', () => {
     let target;
+
+    const PROJECT_DIR = 'platforms/android';
+
+    beforeAll(() => {
+        spyOn(CordovaGradleConfigParserFactory, 'create').and.returnValue(new MockCordovaGradleConfigParser(PROJECT_DIR));
+    });
 
     beforeEach(() => {
         target = rewire('../../lib/target');
@@ -271,7 +279,7 @@ describe('target', () => {
             const apkPath = 'my/apk/path/app.apk';
             buildSpy.findBestApkForArchitecture.and.returnValue(apkPath);
 
-            return target.install(installTarget, { manifest, buildResults }).then(() => {
+            return target.install(installTarget, { manifest, buildResults, cordovaGradleConfigParser: CordovaGradleConfigParserFactory.create(PROJECT_DIR) }).then(() => {
                 expect(buildSpy.findBestApkForArchitecture).toHaveBeenCalledWith(buildResults, installTarget.arch);
 
                 expect(AdbSpy.install.calls.argsFor(0)[1]).toBe(apkPath);
