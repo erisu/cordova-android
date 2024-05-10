@@ -20,7 +20,7 @@ name: Release Auditing
 on: [push, pull_request]
 
 jobs:
-  test:
+  auditLicenses:
     name: Audit Licenses
     runs-on: ubuntu-latest
     steps:
@@ -43,3 +43,12 @@ jobs:
       - uses: erisu/license-checker-action@e929758f9416f30234ac454fc9054ca4b803871d
         with:
           license-config: 'licence_checker.yml'
+
+  auditBinaries:
+    name: Audit Binaries
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout project
+      - uses: actions/checkout@v4
+      # Validate Gradle Wrapper Checksum
+      - uses: gradle/actions/wrapper-validation@v3
