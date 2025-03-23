@@ -67,6 +67,7 @@ jobs:
               - node_modules
               - templates/project/assets/www/cordova.js
               - test/androidx/app/src/main/assets/www/cordova.js
+              - test/androidx/build
 
       - name: npm install and test
         run: |
