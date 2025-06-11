@@ -78,6 +78,14 @@ public class ConfigXmlParser {
         );
 
         pluginEntries.add(
+                new PluginEntry(
+                        SystemBarPlugin.PLUGIN_NAME,
+                        "org.apache.cordova.SystemBarPlugin",
+                        true
+                )
+        );
+
+        pluginEntries.add(
             new PluginEntry(
                 SplashScreenPlugin.PLUGIN_NAME,
                 "org.apache.cordova.SplashScreenPlugin",

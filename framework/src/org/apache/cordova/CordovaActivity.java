@@ -16,6 +16,7 @@
        specific language governing permissions and limitations
        under the License.
 */
+
 package org.apache.cordova;
 
 import java.util.ArrayList;
@@ -29,7 +30,6 @@ import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -198,23 +198,11 @@ public class CordovaActivity extends AppCompatActivity {
                 ViewGroup.LayoutParams.MATCH_PARENT
         ));
 
-        // Add WebView to Root FrameLayout
-        rootLayout.addView(webView);
-
         // Allow AndroidEdgeToEdge to be enabled/disabled
         if (!preferences.getBoolean("AndroidEdgeToEdge", false)) {
             // Create StatusBar view that will overlay the top inset
             View statusBarView = new View(this);
             statusBarView.setTag("statusBarView");
-
-            int statusBarBackgroundColor;
-            try {
-                statusBarBackgroundColor = Color.parseColor(preferences.getString("StatusBarBackgroundColor", "#000000"));
-                statusBarView.setBackgroundColor(statusBarBackgroundColor);
-            } catch (IllegalArgumentException ignore) {
-                LOG.e(TAG, "Invalid hexString argument, use f.i. '#999999'");
-                statusBarView.setBackgroundColor(Color.BLACK);
-            }
 
             // Add statusBarView to root layout.
             rootLayout.addView(statusBarView);
@@ -244,17 +232,9 @@ public class CordovaActivity extends AppCompatActivity {
             ViewCompat.requestApplyInsets(rootLayout);
         }
 
-        setContentView(rootLayout);
+        rootLayout.addView(webView);
 
-        // Optional background color
-        if (preferences.contains("BackgroundColor")) {
-            try {
-                int backgroundColor = preferences.getInteger("BackgroundColor", Color.BLACK);
-                webView.setBackgroundColor(backgroundColor);
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-            }
-        }
+        setContentView(rootLayout);
 
         webView.requestFocusFromTouch();
     }
