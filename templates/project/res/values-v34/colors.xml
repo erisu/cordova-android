@@ -18,6 +18,6 @@
  under the License.
 -->
 <resources>
-    <color name="cdv_background_color_dark">@android:color/system_background_dark</color>
-    <color name="cdv_background_color_light">@android:color/system_background_light</color>
+    <color name="cdv_background_color">@android:color/system_background_light</color>
+    <color name="cdv_splashscreen_background">@color/cdv_background_color</color>
 </resources>
