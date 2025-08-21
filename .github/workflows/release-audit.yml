@@ -46,7 +46,7 @@ jobs:
 
       # Install node packages
       - name: npm install packages
-        run: npm i
+        run: npm ci
 
       # Check node package licenses (v2.0.0)
       - uses: erisu/license-checker-action@1c222d0c2f5898a4c40b8bd6fd6888650bd6f68a
